@@ -10,7 +10,7 @@
             type="button" >Delete</button>
   </div>
 
-  <form (ngSubmit)="pageSubmitHandler()" [formGroup]="pageForm" class="margin-top-10">
+  <form (ngSubmit)="pageSubmitHandler()" [formGroup]="pageForm" [ngClass]="{'margin-top-10' : isPageSelected, 'margin-top-47' : !isPageSelected}">
 
     <div fxLayout="column" fxFlex>
 

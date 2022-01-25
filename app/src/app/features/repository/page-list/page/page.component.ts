@@ -55,7 +55,9 @@ export class PageComponent implements OnInit, OnDestroy {
           this.addMode = isAddPageClicked;
           this.isPageSelected = false;
           this.pageForm.reset();
+          this.tags = [];
           this.hidePageForm = false;
+          this.pageForm.enable();
         }
       })
     }
@@ -86,7 +88,7 @@ export class PageComponent implements OnInit, OnDestroy {
                 });
 
                 // Update Tags Array
-                this.tags = page.tags;
+                this.tags.push(...page.tags) ;
 
                 // Show Form
                 this.hidePageForm = false;
@@ -118,7 +120,10 @@ export class PageComponent implements OnInit, OnDestroy {
 
     // Add our Tag
     if (value) {
+      console.log(this.tags)
+      console.log(value)
       this.tags.push(value);
+      this.pageForm.get('tags')?.setValue(this.tags);
     }
 
     // Clear the input value
@@ -130,6 +135,7 @@ export class PageComponent implements OnInit, OnDestroy {
 
     if (index >= 0) {
       this.tags.splice(index, 1);
+      this.pageForm.get('tags')?.setValue(this.tags);
     }
   }
 
