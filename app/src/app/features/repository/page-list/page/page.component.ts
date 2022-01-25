@@ -53,6 +53,7 @@ export class PageComponent implements OnInit, OnDestroy {
       this.isAddPageClicked$.subscribe((isAddPageClicked: boolean) => {
         if (isAddPageClicked) {
           this.addMode = isAddPageClicked;
+          this.isPageSelected = false;
           this.pageForm.reset();
           this.hidePageForm = false;
         }
@@ -62,6 +63,7 @@ export class PageComponent implements OnInit, OnDestroy {
     this.isPageSelected$ = this.store.select<boolean>(fromRepository.isPageSelectedSelector);
     if ( this.isPageSelected$) {
       this.isPageSelected$.subscribe((isPageSelected: boolean) => {
+        // When Page is expand_more
         if (isPageSelected) {
           this.isPageSelected = isPageSelected;
           this.selectedPage$ = this.store.select<Page | undefined>(fromRepository.selectedPageSelector);
@@ -83,8 +85,6 @@ export class PageComponent implements OnInit, OnDestroy {
                   tags: page.tags
                 });
 
-                console.log(this.pageForm.value)
-
                 // Update Tags Array
                 this.tags = page.tags;
 
@@ -98,6 +98,8 @@ export class PageComponent implements OnInit, OnDestroy {
             });
           }
         } else {
+          // When Page is expand_less
+          this.isPageSelected = false;
           this.hidePageForm = true;
           this.pageForm.reset();
         }
