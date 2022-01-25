@@ -6,8 +6,7 @@ import {MatPaginator} from "@angular/material/paginator";
 import {Page} from "./model/page.model";
 import {PageService} from "./service/page.service";
 import {Store} from "@ngrx/store";
-import {AppState} from "../../../app.state";
-import {selectPage} from "../state/repository.actions";
+import {isPageSelectedAction, selectPageAction} from "../state/repository.actions";
 
 @Component({
   selector: 'app-page-list',
@@ -50,15 +49,13 @@ export class PageListComponent implements OnInit,AfterViewInit {
 
   tableExpandHandler(element: any, expandedElement: any) {
     if (expandedElement && (expandedElement === element)) {
-      console.log('expand_less');
-      // Hide Form
-      this.store.dispatch(selectPage({page: undefined}));
+      this.store.dispatch(isPageSelectedAction({isPageSelected: false}));
     } else {
-      console.log('expand_more')
+      this.store.dispatch(isPageSelectedAction({isPageSelected: true}));
     }
 
     this.expandedElement = this.expandedElement === element ? null : element;
     this.pageService.selectedPage(element);
-    this.store.dispatch(selectPage({page: element}));
+    this.store.dispatch(selectPageAction({page: element}));
   }
 }

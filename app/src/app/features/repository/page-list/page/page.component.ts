@@ -6,7 +6,8 @@ import {Page} from "../model/page.model";
 import {COMMA, ENTER} from "@angular/cdk/keycodes";
 import {MatChipInputEvent} from "@angular/material/chips";
 import {Store} from "@ngrx/store";
-import * as repository from "../../state/repository.selectors";
+import * as fromRepository from "../../state/repository.selectors";
+import {AppState} from "../../../../app.state";
 
 @Component({
   selector: 'app-page',
@@ -30,68 +31,54 @@ export class PageComponent implements OnInit, OnDestroy {
     referenceValue: [''],
     tags: [],
   });
-  selectedPage$: Observable<Page> | undefined;
+  selectedPage$: Observable<Page | undefined> | undefined;
+  isPageSelected$: Observable<boolean> | undefined;
 
   addOnBlur = true;
   readonly separatorKeysCodes = [ENTER, COMMA] as const;
   tags: string[] = [];
 
 
-  constructor(private pageService: PageService, private fb: FormBuilder, private store: Store) {
+  constructor(private pageService: PageService, private fb: FormBuilder, private store: Store<AppState>) {
   }
 
   ngOnInit(): void {
 
-    // this.selectedPageSubscription = this.pageService.selectedPageChanged.subscribe((page: Page) => {
-    //
-    //   // Set Value to Form
-    //   this.pageForm.setValue({
-    //     _id: page._id,
-    //     pageMappingId: page.pageMappingId,
-    //     projectId: page.projectId,
-    //     releaseId: page.releaseId,
-    //     pageName: page.pageName,
-    //     pageDescription: page.pageDescription,
-    //     pageType: page.pageType,
-    //     isFrame: page.isFrame,
-    //     referenceType: page.referenceType,
-    //     referenceValue: page.referenceValue,
-    //     tags: page.tags
-    //   });
-    //
-    //   // Update Tags Array
-    //   this.tags = page.tags;
-    //
-    //   // Show Form
-    //   this.hidePageForm = false;
-    // });
+    this.isPageSelected$ = this.store.select<boolean>(fromRepository.isPageSelectedSelector);
+    if ( this.isPageSelected$) {
+      this.isPageSelected$.subscribe((isPageSelected: boolean) => {
+        if (isPageSelected) {
+          this.selectedPage$ = this.store.select<Page | undefined>(fromRepository.selectedPageSelector);
+          if (this.selectedPage$) {
+            this.selectedPage$.subscribe((page: Page | undefined) => {
+              // Set Value to Form
+              if (page) {
+                this.pageForm.setValue({
+                  _id: page._id,
+                  pageMappingId: page.pageMappingId,
+                  projectId: page.projectId,
+                  releaseId: page.releaseId,
+                  pageName: page.pageName,
+                  pageDescription: page.pageDescription,
+                  pageType: page.pageType,
+                  isFrame: page.isFrame,
+                  referenceType: page.referenceType,
+                  referenceValue: page.referenceValue,
+                  tags: page.tags
+                });
 
+                // Update Tags Array
+                this.tags = page.tags;
 
-    // @ts-ignore
-    this.selectedPage$ = this.store.select<Page>(repository.selectedPage());
+                // Show Form
+                this.hidePageForm = false;
+              }
 
-    if (this.selectedPage$) {
-      this.selectedPage$.subscribe((page: Page) => {
-        // Set Value to Form
-        this.pageForm.setValue({
-          _id: page._id,
-          pageMappingId: page.pageMappingId,
-          projectId: page.projectId,
-          releaseId: page.releaseId,
-          pageName: page.pageName,
-          pageDescription: page.pageDescription,
-          pageType: page.pageType,
-          isFrame: page.isFrame,
-          referenceType: page.referenceType,
-          referenceValue: page.referenceValue,
-          tags: page.tags
-        });
-
-        // Update Tags Array
-        this.tags = page.tags;
-
-        // Show Form
-        this.hidePageForm = false;
+            });
+          }
+        } else {
+          this.hidePageForm = true;
+        }
       });
     }
 
