@@ -14,6 +14,11 @@ export const isPageSelectedSelector = createSelector(
   (state: RepositoryState) => state.isPageSelected
 );
 
+export const isAddPageClicked = createSelector(
+  selectRepository,
+  (state: RepositoryState) => state.isAddPageClicked
+);
+
 export const allPages = createSelector(
   selectRepository,
   (state: RepositoryState) => state.pages

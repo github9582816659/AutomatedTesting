@@ -1,5 +1,5 @@
 import { createAction, props } from '@ngrx/store';
-import {Page} from "../page-list/model/page.model";
+import {Page} from "../model/page.model";
 
 export const selectPageAction = createAction(
   '[Repository Page] Select Page',
@@ -11,8 +11,13 @@ export const isPageSelectedAction = createAction(
   props<{ isPageSelected: boolean}>()
 );
 
+export const isAddPageClickedAction = createAction(
+  '[Repository Page] Add Page Clicked',
+  props<{ isAddPageClicked: boolean}>()
+);
+
 export const allPages = createAction(
-  '[Repository Page] Is Page Selected'
+  '[Repository Page] All Pages'
 );
 
 

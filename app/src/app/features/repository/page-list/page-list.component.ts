@@ -3,9 +3,9 @@ import {animate, state, style, transition, trigger} from "@angular/animations";
 import {MatTableDataSource} from "@angular/material/table";
 import {MatSort} from "@angular/material/sort";
 import {MatPaginator} from "@angular/material/paginator";
-import {Page} from "./model/page.model";
+import {Page} from "../model/page.model";
 import {Store} from "@ngrx/store";
-import {isPageSelectedAction, selectPageAction} from "../state/repository.actions";
+import {isAddPageClickedAction, isPageSelectedAction, selectPageAction} from "../state/repository.actions";
 import {AppState} from "../../../app.state";
 import * as fromRepository from "../state/repository.selectors";
 import {Observable} from "rxjs";
@@ -58,9 +58,14 @@ export class PageListComponent implements OnInit,AfterViewInit {
       this.store.dispatch(isPageSelectedAction({isPageSelected: false}));
     } else {
       this.store.dispatch(isPageSelectedAction({isPageSelected: true}));
+      this.store.dispatch(isAddPageClickedAction({isAddPageClicked: false}));
     }
 
     this.expandedElement = this.expandedElement === element ? null : element;
     this.store.dispatch(selectPageAction({page: element}));
+  }
+
+  addPageClickHandler() {
+    this.store.dispatch(isAddPageClickedAction({isAddPageClicked: true}));
   }
 }

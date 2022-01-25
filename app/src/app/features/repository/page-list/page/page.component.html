@@ -1,8 +1,13 @@
 <div *ngIf="!hidePageForm">
 
-  <div fxLayout="row" fxLayoutAlign="flex-end" fxLayoutGap="5px">
-    <button mat-flat-button color="primary" type="button" (click)="editClickHandler()">Edit</button>
-    <button mat-flat-button color="primary" type="button" >Delete</button>
+  <div fxLayout="row" fxLayoutAlign="flex-end" fxLayoutGap="5px" *ngIf="isPageSelected">
+    <button mat-flat-button
+            color="primary"
+            type="button"
+            (click)="editPageClickHandler()">Edit</button>
+    <button mat-flat-button
+            color="primary"
+            type="button" >Delete</button>
   </div>
 
   <form (ngSubmit)="pageSubmitHandler()" [formGroup]="pageForm" class="margin-top-10">

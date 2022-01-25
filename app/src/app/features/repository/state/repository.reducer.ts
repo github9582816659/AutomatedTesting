@@ -1,4 +1,4 @@
-import {Page} from "../page-list/model/page.model";
+import {Page} from "../model/page.model";
 import {createReducer, on} from "@ngrx/store";
 import * as RepositoryAction from "./repository.actions";
 
@@ -7,6 +7,7 @@ export interface RepositoryState {
   pages: Page[];
   selectedPage: Page | undefined;
   isPageSelected: boolean;
+  isAddPageClicked: boolean;
   error: string;
   status: 'pending' | 'loading' | 'error' | 'success';
 }
@@ -20,6 +21,7 @@ export const initialState: RepositoryState = {
     {_id: '61e716d4d4ff42528118ea5f', pageMappingId: '61e716d4d4ff42528118ea5a', projectId: '61d580d86282242f2e9f17w1', releaseId: '61d580d86282242f2e9f17ad', pageName: 'Dashboard', pageDescription: 'Dashboard Page', pageType: 'PAGE', isFrame: true, referenceType: 'XPATH', referenceValue: 'dashboard', tags:['login', 'page']}
   ],
   isPageSelected: false,
+  isAddPageClicked: false,
   status: 'pending'
 };
 
@@ -33,6 +35,10 @@ export const repositoryReducer = createReducer(
   on(RepositoryAction.isPageSelectedAction, (state, {isPageSelected} ) => ({
     ...state,
     isPageSelected: isPageSelected
+  })),
+  on(RepositoryAction.isAddPageClickedAction, (state, {isAddPageClicked} ) => ({
+    ...state,
+    isAddPageClicked: isAddPageClicked
   })),
   on(RepositoryAction.allPages, (state ) => ({
     ...state

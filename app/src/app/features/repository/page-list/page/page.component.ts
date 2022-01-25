@@ -1,12 +1,13 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
 import {FormBuilder, Validators} from "@angular/forms";
 import {Observable, Subscription} from "rxjs";
-import {Page, RefType} from "../model/page.model";
+import {Page, RefType} from "../../model/page.model";
 import {COMMA, ENTER} from "@angular/cdk/keycodes";
 import {MatChipInputEvent} from "@angular/material/chips";
 import {Store} from "@ngrx/store";
 import * as fromRepository from "../../state/repository.selectors";
 import {AppState} from "../../../../app.state";
+import {isAddPageClickedAction} from "../../state/repository.actions";
 
 @Component({
   selector: 'app-page',
@@ -24,7 +25,7 @@ export class PageComponent implements OnInit, OnDestroy {
     releaseId: [''],
     pageName: ['', Validators.required],
     pageDescription: [''],
-    pageType: ['', Validators.required],
+    pageType: [''],
     isFrame: [false],
     referenceType: [''],
     referenceValue: [''],
@@ -32,6 +33,7 @@ export class PageComponent implements OnInit, OnDestroy {
   });
   selectedPage$: Observable<Page | undefined> | undefined;
   isPageSelected$: Observable<boolean> | undefined;
+  isAddPageClicked$: Observable<boolean> | undefined;
   addOnBlur = true;
   readonly separatorKeysCodes = [ENTER, COMMA] as const;
   tags: string[] = [];
@@ -40,14 +42,28 @@ export class PageComponent implements OnInit, OnDestroy {
     {value: 'JSPATH', viewValue: 'JS-Path'},
   ];
   editMode: boolean = false;
+  addMode: boolean = false;
+  isPageSelected: boolean = false;
 
   constructor(private fb: FormBuilder, private store: Store<AppState>) {}
 
   ngOnInit(): void {
+    this.isAddPageClicked$ = this.store.select<boolean>(fromRepository.isAddPageClicked);
+    if (this.isAddPageClicked$) {
+      this.isAddPageClicked$.subscribe((isAddPageClicked: boolean) => {
+        if (isAddPageClicked) {
+          this.addMode = isAddPageClicked;
+          this.pageForm.reset();
+          this.hidePageForm = false;
+        }
+      })
+    }
+
     this.isPageSelected$ = this.store.select<boolean>(fromRepository.isPageSelectedSelector);
     if ( this.isPageSelected$) {
       this.isPageSelected$.subscribe((isPageSelected: boolean) => {
         if (isPageSelected) {
+          this.isPageSelected = isPageSelected;
           this.selectedPage$ = this.store.select<Page | undefined>(fromRepository.selectedPageSelector);
           if (this.selectedPage$) {
             this.selectedPage$.subscribe((page: Page | undefined) => {
@@ -67,6 +83,8 @@ export class PageComponent implements OnInit, OnDestroy {
                   tags: page.tags
                 });
 
+                console.log(this.pageForm.value)
+
                 // Update Tags Array
                 this.tags = page.tags;
 
@@ -81,6 +99,7 @@ export class PageComponent implements OnInit, OnDestroy {
           }
         } else {
           this.hidePageForm = true;
+          this.pageForm.reset();
         }
       });
     }
@@ -90,20 +109,6 @@ export class PageComponent implements OnInit, OnDestroy {
     if (this.selectedPageSubscription) {
       this.selectedPageSubscription.unsubscribe()
     }
-  }
-
-  pageSubmitHandler() {
-    console.log(this.pageForm.value);
-
-    if (this.editMode) {
-      // Update
-    } else {
-      // Save
-    }
-
-    this.editMode = false;
-    this.pageForm.disable();
-
   }
 
   addTag(event: MatChipInputEvent) {
@@ -126,8 +131,29 @@ export class PageComponent implements OnInit, OnDestroy {
     }
   }
 
-  editClickHandler() {
+  editPageClickHandler() {
     this.pageForm.enable();
     this.editMode = true;
   }
+
+  pageSubmitHandler() {
+    console.log(this.pageForm.value);
+
+    if (this.editMode) {
+      // Update
+      console.log('Edit Mode');
+      this.editMode = false;
+      this.pageForm.disable();
+    } else {
+      // Save
+      console.log('Create Mode');
+      this.pageForm.reset();
+      this.store.dispatch(isAddPageClickedAction({isAddPageClicked: false}));
+      this.hidePageForm = true;
+    }
+
+
+
+  }
+
 }
