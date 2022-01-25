@@ -50,5 +50,4 @@ tr.example-element-row:not(.example-expanded-row):active {
   border-left: 1px solid #cdd0d4;
   border-top: 1px solid #cdd0d4;
   border-right: 1px solid #cdd0d4;
-  border-collapse: collapse;
 }

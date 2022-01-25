@@ -3,74 +3,11 @@ import {animate, state, style, transition, trigger} from "@angular/animations";
 import {MatTableDataSource} from "@angular/material/table";
 import {MatSort} from "@angular/material/sort";
 import {MatPaginator} from "@angular/material/paginator";
-
-export interface PeriodicElement {
-  name: string;
-  position: number;
-}
-
-const ELEMENT_DATA: PeriodicElement[] = [
-  {
-    position: 1,
-    name: 'Register'
-  },
-  {
-    position: 2,
-    name: 'Login'
-  },
-  {
-    position: 3,
-    name: 'Dashboard'
-  },
-  {
-    position: 4,
-    name: 'About'
-  },
-  {
-    position: 5,
-    name: 'Contact Us'
-  },
-  {
-    position: 6,
-    name: 'Profile'
-  },
-  {
-    position: 7,
-    name: 'Logout'
-  },
-  {
-    position: 8,
-    name: 'Notification'
-  },
-  {
-    position: 9,
-    name: 'Block'
-  },
-  {
-    position: 10,
-    name: 'Allow'
-  },
-  {
-    position: 11,
-    name: 'Test'
-  },
-  {
-    position: 12,
-    name: 'Control'
-  },
-  {
-    position: 13,
-    name: 'Page 13'
-  },
-  {
-    position: 14,
-    name: 'Page 14'
-  },
-  {
-    position: 15,
-    name: 'Page 15'
-  }
-];
+import {Page} from "./model/page.model";
+import {PageService} from "./service/page.service";
+import {Store} from "@ngrx/store";
+import {AppState} from "../../../app.state";
+import {selectPage} from "../state/repository.actions";
 
 @Component({
   selector: 'app-page-list',
@@ -89,11 +26,14 @@ export class PageListComponent implements OnInit,AfterViewInit {
   @ViewChild(MatSort) sort!: MatSort;
   @ViewChild(MatPaginator) paginator!: MatPaginator;
 
-  dataSource = new MatTableDataSource(ELEMENT_DATA);
-  columnsToDisplay = ['name'];
-  expandedElement: PeriodicElement | null | undefined;
+  dataSource = new MatTableDataSource<Page>([
+    {_id: '61e716d4d4ff42528118ea5e', pageMappingId: '61e716d4d4ff42528118ea5d', projectId: '61d580d86282242f2e9f17b0', releaseId: '61d580d86282242f2e9f17ae', pageName: 'Register', pageDescription: 'Register Page', pageType: 'PAGE', isFrame: false, referenceType: '', referenceValue: '', tags:['login', 'page']},
+    {_id: '61e716d4d4ff42528118ea5f', pageMappingId: '61e716d4d4ff42528118ea5e', projectId: '61d580d86282242f2e9f17b1', releaseId: '61d580d86282242f2e9f17af', pageName: 'Login', pageDescription: 'Login Page', pageType: 'PAGE', isFrame: true, referenceType: '/login', referenceValue: 'login', tags:['login', 'page']}
+  ]);
+  columnsToDisplay = ['pageName'];
+  expandedElement: Page | null | undefined;
 
-  constructor() { }
+  constructor(private pageService: PageService, private store: Store) { }
 
   ngOnInit(): void {
   }
@@ -106,5 +46,19 @@ export class PageListComponent implements OnInit,AfterViewInit {
   tableFilterHandler(event: Event) {
     const filterValue = (event.target as HTMLInputElement).value;
     this.dataSource.filter = filterValue.trim().toLowerCase();
+  }
+
+  tableExpandHandler(element: any, expandedElement: any) {
+    if (expandedElement && (expandedElement === element)) {
+      console.log('expand_less');
+      // Hide Form
+      this.store.dispatch(selectPage({page: undefined}));
+    } else {
+      console.log('expand_more')
+    }
+
+    this.expandedElement = this.expandedElement === element ? null : element;
+    this.pageService.selectedPage(element);
+    this.store.dispatch(selectPage({page: element}));
   }
 }

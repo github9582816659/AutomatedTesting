@@ -22,7 +22,7 @@ import { ComponentListComponent } from './page-list/component-list/component-lis
     ReactiveFormsModule,
     FlexLayoutModule,
     MaterialModule,
-    RepositoryRoutingModule
+    RepositoryRoutingModule,
   ]
 })
 export class RepositoryModule {
