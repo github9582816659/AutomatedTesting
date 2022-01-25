@@ -1,11 +1,11 @@
-<div>
+<div *ngIf="!hidePageForm">
 
   <div fxLayout="row" fxLayoutAlign="flex-end" fxLayoutGap="5px">
-    <button mat-flat-button color="primary" type="button" >Edit</button>
+    <button mat-flat-button color="primary" type="button" (click)="editClickHandler()">Edit</button>
     <button mat-flat-button color="primary" type="button" >Delete</button>
   </div>
 
-  <form (ngSubmit)="pageSubmitHandler()" [formGroup]="pageForm" class="margin-top-10" *ngIf="!hidePageForm">
+  <form (ngSubmit)="pageSubmitHandler()" [formGroup]="pageForm" class="margin-top-10">
 
     <div fxLayout="column" fxFlex>
 
@@ -53,6 +53,17 @@
       </mat-checkbox>
 
       <!--   Reference Type   -->
+      <mat-form-field *ngIf="pageForm.value['isFrame']">
+        <mat-label>Reference Type</mat-label>
+        <mat-select formControlName="referenceType">
+          <mat-option *ngFor="let refType of refTypes" [value]="refType.value">
+            {{refType.viewValue}}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+      <mat-error *ngIf="!pageForm?.get('referenceType')?.valid && pageForm?.get('referenceType')?.touched" class="error-hint">
+        <small class="mat-small">Please provide valid reference type</small>
+      </mat-error>
 
       <!--   Reference Value   -->
       <mat-form-field *ngIf="pageForm.value['isFrame']">
@@ -66,8 +77,7 @@
 
       <!--   Submit   -->
       <div fxFlex fxLayoutAlign="end">
-        <button mat-flat-button [disabled]="!pageForm.valid" color="primary" type="submit">Submit
-        </button>
+        <button mat-flat-button [disabled]="!pageForm.valid" color="primary" type="submit">{{editMode ? "Update" : "Save"}}</button>
       </div>
 
     </div>

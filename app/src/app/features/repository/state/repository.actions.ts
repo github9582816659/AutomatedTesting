@@ -11,4 +11,8 @@ export const isPageSelectedAction = createAction(
   props<{ isPageSelected: boolean}>()
 );
 
+export const allPages = createAction(
+  '[Repository Page] Is Page Selected'
+);
+
 

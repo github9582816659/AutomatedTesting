@@ -11,3 +11,9 @@ export interface Page {
   referenceValue: string;
   tags: string[]
 }
+
+
+export interface RefType {
+  value: string;
+  viewValue: string;
+}

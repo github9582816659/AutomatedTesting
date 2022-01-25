@@ -13,3 +13,8 @@ export const isPageSelectedSelector = createSelector(
   selectRepository,
   (state: RepositoryState) => state.isPageSelected
 );
+
+export const allPages = createSelector(
+  selectRepository,
+  (state: RepositoryState) => state.pages
+);

@@ -1,8 +1,7 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
-import {PageService} from "../service/page.service";
 import {FormBuilder, Validators} from "@angular/forms";
 import {Observable, Subscription} from "rxjs";
-import {Page} from "../model/page.model";
+import {Page, RefType} from "../model/page.model";
 import {COMMA, ENTER} from "@angular/cdk/keycodes";
 import {MatChipInputEvent} from "@angular/material/chips";
 import {Store} from "@ngrx/store";
@@ -33,17 +32,18 @@ export class PageComponent implements OnInit, OnDestroy {
   });
   selectedPage$: Observable<Page | undefined> | undefined;
   isPageSelected$: Observable<boolean> | undefined;
-
   addOnBlur = true;
   readonly separatorKeysCodes = [ENTER, COMMA] as const;
   tags: string[] = [];
+  refTypes: RefType[] = [
+    {value: 'XPATH', viewValue: 'X-Path'},
+    {value: 'JSPATH', viewValue: 'JS-Path'},
+  ];
+  editMode: boolean = false;
 
-
-  constructor(private pageService: PageService, private fb: FormBuilder, private store: Store<AppState>) {
-  }
+  constructor(private fb: FormBuilder, private store: Store<AppState>) {}
 
   ngOnInit(): void {
-
     this.isPageSelected$ = this.store.select<boolean>(fromRepository.isPageSelectedSelector);
     if ( this.isPageSelected$) {
       this.isPageSelected$.subscribe((isPageSelected: boolean) => {
@@ -72,6 +72,9 @@ export class PageComponent implements OnInit, OnDestroy {
 
                 // Show Form
                 this.hidePageForm = false;
+
+                // Disable Form
+                this.pageForm.disable();
               }
 
             });
@@ -81,7 +84,6 @@ export class PageComponent implements OnInit, OnDestroy {
         }
       });
     }
-
   }
 
   ngOnDestroy(): void {
@@ -92,6 +94,16 @@ export class PageComponent implements OnInit, OnDestroy {
 
   pageSubmitHandler() {
     console.log(this.pageForm.value);
+
+    if (this.editMode) {
+      // Update
+    } else {
+      // Save
+    }
+
+    this.editMode = false;
+    this.pageForm.disable();
+
   }
 
   addTag(event: MatChipInputEvent) {
@@ -112,5 +124,10 @@ export class PageComponent implements OnInit, OnDestroy {
     if (index >= 0) {
       this.tags.splice(index, 1);
     }
+  }
+
+  editClickHandler() {
+    this.pageForm.enable();
+    this.editMode = true;
   }
 }

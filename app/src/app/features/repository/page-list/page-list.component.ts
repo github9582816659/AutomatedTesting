@@ -4,9 +4,11 @@ import {MatTableDataSource} from "@angular/material/table";
 import {MatSort} from "@angular/material/sort";
 import {MatPaginator} from "@angular/material/paginator";
 import {Page} from "./model/page.model";
-import {PageService} from "./service/page.service";
 import {Store} from "@ngrx/store";
 import {isPageSelectedAction, selectPageAction} from "../state/repository.actions";
+import {AppState} from "../../../app.state";
+import * as fromRepository from "../state/repository.selectors";
+import {Observable} from "rxjs";
 
 @Component({
   selector: 'app-page-list',
@@ -25,16 +27,20 @@ export class PageListComponent implements OnInit,AfterViewInit {
   @ViewChild(MatSort) sort!: MatSort;
   @ViewChild(MatPaginator) paginator!: MatPaginator;
 
-  dataSource = new MatTableDataSource<Page>([
-    {_id: '61e716d4d4ff42528118ea5e', pageMappingId: '61e716d4d4ff42528118ea5d', projectId: '61d580d86282242f2e9f17b0', releaseId: '61d580d86282242f2e9f17ae', pageName: 'Register', pageDescription: 'Register Page', pageType: 'PAGE', isFrame: false, referenceType: '', referenceValue: '', tags:['login', 'page']},
-    {_id: '61e716d4d4ff42528118ea5f', pageMappingId: '61e716d4d4ff42528118ea5e', projectId: '61d580d86282242f2e9f17b1', releaseId: '61d580d86282242f2e9f17af', pageName: 'Login', pageDescription: 'Login Page', pageType: 'PAGE', isFrame: true, referenceType: '/login', referenceValue: 'login', tags:['login', 'page']}
-  ]);
+  dataSource = new MatTableDataSource<Page>([]);
+  allPages$: Observable<Page[]> | undefined;
   columnsToDisplay = ['pageName'];
   expandedElement: Page | null | undefined;
 
-  constructor(private pageService: PageService, private store: Store) { }
+  constructor(private store: Store<AppState>) { }
 
   ngOnInit(): void {
+     this.allPages$ = this.store.select<Page[]>(fromRepository.allPages);
+     if (this.allPages$) {
+       this.allPages$.subscribe((pages:Page[]) => {
+         this.dataSource.data = pages;
+       })
+     }
   }
 
   ngAfterViewInit(): void {
@@ -55,7 +61,6 @@ export class PageListComponent implements OnInit,AfterViewInit {
     }
 
     this.expandedElement = this.expandedElement === element ? null : element;
-    this.pageService.selectedPage(element);
     this.store.dispatch(selectPageAction({page: element}));
   }
 }
