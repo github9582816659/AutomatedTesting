@@ -42,5 +42,24 @@ export const repositoryReducer = createReducer(
   })),
   on(RepositoryAction.allPages, (state ) => ({
     ...state
-  }))
+  })),
+  on(RepositoryAction.editPageAction, (state, {page} ) => {
+    let index = -1;
+    if (page) {
+      index = state.pages.findIndex(p => p.projectId === page.projectId);
+    }
+
+    const updatedPage = {
+      ...state.pages[index],
+      ...page
+    };
+
+    const updatedPages = [...state.pages];
+    updatedPages[index] = updatedPage;
+
+    return {
+      ...state,
+      pages: updatedPages
+    };
+  })
 );

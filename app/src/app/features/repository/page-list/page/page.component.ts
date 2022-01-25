@@ -7,7 +7,7 @@ import {MatChipInputEvent} from "@angular/material/chips";
 import {Store} from "@ngrx/store";
 import * as fromRepository from "../../state/repository.selectors";
 import {AppState} from "../../../../app.state";
-import {isAddPageClickedAction} from "../../state/repository.actions";
+import {editPageAction, isAddPageClickedAction} from "../../state/repository.actions";
 
 @Component({
   selector: 'app-page',
@@ -71,6 +71,7 @@ export class PageComponent implements OnInit, OnDestroy {
           this.selectedPage$ = this.store.select<Page | undefined>(fromRepository.selectedPageSelector);
           if (this.selectedPage$) {
             this.selectedPage$.subscribe((page: Page | undefined) => {
+              console.log(page)
               // Set Value to Form
               if (page) {
                 this.pageForm.setValue({
@@ -88,6 +89,7 @@ export class PageComponent implements OnInit, OnDestroy {
                 });
 
                 // Update Tags Array
+                this.tags = [];
                 this.tags.push(...page.tags) ;
 
                 // Show Form
@@ -120,8 +122,6 @@ export class PageComponent implements OnInit, OnDestroy {
 
     // Add our Tag
     if (value) {
-      console.log(this.tags)
-      console.log(value)
       this.tags.push(value);
       this.pageForm.get('tags')?.setValue(this.tags);
     }
@@ -144,12 +144,26 @@ export class PageComponent implements OnInit, OnDestroy {
     this.editMode = true;
   }
 
-  pageSubmitHandler() {
+  pageSubmitHandler(index?: number) {
     console.log(this.pageForm.value);
 
     if (this.editMode) {
       // Update
+      const page: Page = {
+        _id: this.pageForm.get('_id')?.value,
+        pageMappingId: this.pageForm.get('pageMappingId')?.value,
+        projectId: this.pageForm.get('projectId')?.value,
+        releaseId: this.pageForm.get('releaseId')?.value,
+        pageName: this.pageForm.get('pageName')?.value,
+        pageDescription: this.pageForm.get('pageDescription')?.value,
+        pageType: this.pageForm.get('pageType')?.value,
+        isFrame: this.pageForm.get('isFrame')?.value,
+        referenceType: this.pageForm.get('referenceType')?.value,
+        referenceValue: this.pageForm.get('referenceValue')?.value,
+        tags: this.pageForm.get('tags')?.value
+      }
       console.log('Edit Mode');
+      this.store.dispatch(editPageAction({page}));
       this.editMode = false;
       this.pageForm.disable();
     } else {

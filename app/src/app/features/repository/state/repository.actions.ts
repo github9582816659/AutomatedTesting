@@ -6,6 +6,12 @@ export const selectPageAction = createAction(
   props<{ page: Page | undefined}>()
 );
 
+export const editPageAction = createAction(
+  '[Repository Page] Edit Page',
+  props<{ page: Page | undefined}>()
+);
+
+
 export const isPageSelectedAction = createAction(
   '[Repository Page] Is Page Selected',
   props<{ isPageSelected: boolean}>()
