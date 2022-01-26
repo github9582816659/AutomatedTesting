@@ -16,9 +16,9 @@ export const initialState: RepositoryState = {
   error: "",
   selectedPage: undefined,
   pages: [
-    {_id: '61e716d4d4ff42528118ea5e', pageMappingId: '61e716d4d4ff42528118ea5d', projectId: '61d580d86282242f2e9f17b0', releaseId: '61d580d86282242f2e9f17ae', pageName: 'Register', pageDescription: 'Register Page', pageType: 'PAGE', isFrame: false, referenceType: '', referenceValue: '', tags:['login', 'page']},
+    {_id: '61e716d4d4ff42528118ea5e', pageMappingId: '61e716d4d4ff42528118ea5d', projectId: '61d580d86282242f2e9f17b0', releaseId: '61d580d86282242f2e9f17ae', pageName: 'Register', pageDescription: 'Register Page', pageType: 'PAGE', isFrame: false, referenceType: '', referenceValue: '', tags:['register', 'page']},
     {_id: '61e716d4d4ff42528118ea5f', pageMappingId: '61e716d4d4ff42528118ea5e', projectId: '61d580d86282242f2e9f17b1', releaseId: '61d580d86282242f2e9f17af', pageName: 'Login', pageDescription: 'Login Page', pageType: 'PAGE', isFrame: true, referenceType: 'JSPATH', referenceValue: 'login', tags:['login', 'page']},
-    {_id: '61e716d4d4ff42528118ea5f', pageMappingId: '61e716d4d4ff42528118ea5a', projectId: '61d580d86282242f2e9f17w1', releaseId: '61d580d86282242f2e9f17ad', pageName: 'Dashboard', pageDescription: 'Dashboard Page', pageType: 'PAGE', isFrame: true, referenceType: 'XPATH', referenceValue: 'dashboard', tags:['login', 'page']}
+    {_id: '61e716d4d4ff42528118ea5q', pageMappingId: '61e716d4d4ff42528118ea5a', projectId: '61d580d86282242f2e9f17w1', releaseId: '61d580d86282242f2e9f17ad', pageName: 'Dashboard', pageDescription: 'Dashboard Page', pageType: 'PAGE', isFrame: true, referenceType: 'XPATH', referenceValue: 'dashboard', tags:['dashboard', 'page']}
   ],
   isPageSelected: false,
   isAddPageClicked: false,
@@ -46,7 +46,7 @@ export const repositoryReducer = createReducer(
   on(RepositoryAction.editPageAction, (state, {page} ) => {
     let index = -1;
     if (page) {
-      index = state.pages.findIndex(p => p.projectId === page.projectId);
+      index = state.pages.findIndex(p => p._id === page._id);
     }
 
     const updatedPage = {

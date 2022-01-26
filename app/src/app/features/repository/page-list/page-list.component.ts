@@ -55,8 +55,10 @@ export class PageListComponent implements OnInit,AfterViewInit {
 
   tableExpandHandler(element: any, expandedElement: any) {
     if (expandedElement && (expandedElement === element)) {
+      console.log('CLOSE')
       this.store.dispatch(isPageSelectedAction({isPageSelected: false}));
     } else {
+      console.log('OPEN')
       this.store.dispatch(isPageSelectedAction({isPageSelected: true}));
       this.store.dispatch(isAddPageClickedAction({isAddPageClicked: false}));
     }
@@ -66,6 +68,7 @@ export class PageListComponent implements OnInit,AfterViewInit {
   }
 
   addPageClickHandler() {
+    this.store.dispatch(isPageSelectedAction({isPageSelected: false}));
     this.store.dispatch(isAddPageClickedAction({isAddPageClicked: true}));
   }
 }

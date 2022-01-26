@@ -55,9 +55,9 @@ export class PageComponent implements OnInit, OnDestroy {
           this.addMode = isAddPageClicked;
           this.isPageSelected = false;
           this.pageForm.reset();
+          this.pageForm.enable();
           this.tags = [];
           this.hidePageForm = false;
-          this.pageForm.enable();
         }
       })
     }
@@ -109,6 +109,7 @@ export class PageComponent implements OnInit, OnDestroy {
         }
       });
     }
+
   }
 
   ngOnDestroy(): void {
