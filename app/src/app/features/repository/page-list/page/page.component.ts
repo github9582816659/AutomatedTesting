@@ -71,7 +71,6 @@ export class PageComponent implements OnInit, OnDestroy {
           this.selectedPage$ = this.store.select<Page | undefined>(fromRepository.selectedPageSelector);
           if (this.selectedPage$) {
             this.selectedPage$.subscribe((page: Page | undefined) => {
-              console.log(page)
               // Set Value to Form
               if (page) {
                 this.pageForm.setValue({
