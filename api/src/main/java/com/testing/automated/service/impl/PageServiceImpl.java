@@ -11,6 +11,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.bson.types.ObjectId;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -43,7 +44,19 @@ public class PageServiceImpl implements PageService {
 
     @Override
     public List<PageResponse> findAllPages() {
-        return null;
+        try {
+            List<PageResponse> pageList = new ArrayList<>();
+            List<Page> all = pageRepository.findAll();
+            if (all != null && !all.isEmpty()) {
+                for (Page page: all) {
+                    pageList.add(getPageDto(page));
+                }
+            }
+            return pageList;
+        } catch (Exception ex) {
+            log.error("Atlas Exception while find all pages ", ex);
+            throw new AtlasException(Constants.ATLAS_ERROR);
+        }
     }
 
     @Override
