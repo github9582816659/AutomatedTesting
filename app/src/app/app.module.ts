@@ -6,6 +6,9 @@ import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {SharedModule} from "./features/shared/shared.module";
 import {StoreModule} from "@ngrx/store";
 import * as fromRepository from "./features/repository/state/repository.reducer";
+import { EffectsModule } from '@ngrx/effects';
+import {RepositoryEffects} from "./features/repository/state/repository.effects";
+import {HttpClientModule} from "@angular/common/http";
 
 @NgModule({
   declarations: [
@@ -14,9 +17,11 @@ import * as fromRepository from "./features/repository/state/repository.reducer"
   imports: [
     BrowserModule,
     BrowserAnimationsModule,
+    HttpClientModule,
     AppRoutingModule,
     StoreModule.forRoot({ repository: fromRepository.repositoryReducer }),
-    SharedModule
+    SharedModule,
+    EffectsModule.forRoot([RepositoryEffects])
   ],
   providers: [],
   bootstrap: [AppComponent]

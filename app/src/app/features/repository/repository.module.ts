@@ -8,6 +8,7 @@ import {FormsModule, ReactiveFormsModule} from "@angular/forms";
 import {FlexLayoutModule} from "@angular/flex-layout";
 import {MaterialModule} from "../../material.module";
 import { ComponentListComponent } from './page-list/component-list/component-list.component';
+import {HttpClientModule} from "@angular/common/http";
 
 @NgModule({
   declarations: [
@@ -19,10 +20,11 @@ import { ComponentListComponent } from './page-list/component-list/component-lis
   imports: [
     CommonModule,
     FormsModule,
+    HttpClientModule,
     ReactiveFormsModule,
     FlexLayoutModule,
     MaterialModule,
-    RepositoryRoutingModule,
+    RepositoryRoutingModule
   ]
 })
 export class RepositoryModule {

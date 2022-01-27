@@ -19,7 +19,7 @@ export class PageComponent implements OnInit, OnDestroy {
   selectedPageSubscription!: Subscription;
   hidePageForm: boolean = true;
   pageForm = this.fb.group({
-    _id: [''],
+    pageId: [''],
     pageMappingId: [''],
     projectId: [''],
     releaseId: [''],
@@ -74,22 +74,25 @@ export class PageComponent implements OnInit, OnDestroy {
               // Set Value to Form
               if (page) {
                 this.pageForm.setValue({
-                  _id: page._id,
-                  pageMappingId: page.pageMappingId,
-                  projectId: page.projectId,
-                  releaseId: page.releaseId,
-                  pageName: page.pageName,
-                  pageDescription: page.pageDescription,
-                  pageType: page.pageType,
-                  isFrame: page.isFrame,
-                  referenceType: page.referenceType,
-                  referenceValue: page.referenceValue,
-                  tags: page.tags
+                  pageId: page?.pageId,
+                  pageMappingId: page?.pageMappingId,
+                  projectId: page?.projectId,
+                  releaseId: page?.releaseId,
+                  pageName: page?.pageName,
+                  pageDescription: page?.pageDescription || '',
+                  pageType: page?.pageType,
+                  isFrame: page?.isFrame,
+                  referenceType: page?.referenceType,
+                  referenceValue: page?.referenceValue,
+                  tags: page?.tags
                 });
 
                 // Update Tags Array
                 this.tags = [];
+
+                if (page.tags) {
                 this.tags.push(...page.tags) ;
+                }
 
                 // Show Form
                 this.hidePageForm = false;
@@ -150,7 +153,7 @@ export class PageComponent implements OnInit, OnDestroy {
     if (this.editMode) {
       // Update
       const page: Page = {
-        _id: this.pageForm.get('_id')?.value,
+        pageId: this.pageForm.get('_id')?.value,
         pageMappingId: this.pageForm.get('pageMappingId')?.value,
         projectId: this.pageForm.get('projectId')?.value,
         releaseId: this.pageForm.get('releaseId')?.value,

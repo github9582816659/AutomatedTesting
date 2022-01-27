@@ -5,7 +5,12 @@ import {MatSort} from "@angular/material/sort";
 import {MatPaginator} from "@angular/material/paginator";
 import {Page} from "../model/page.model";
 import {Store} from "@ngrx/store";
-import {isAddPageClickedAction, isPageSelectedAction, selectPageAction} from "../state/repository.actions";
+import {
+  isAddPageClickedAction,
+  isPageSelectedAction,
+  loadAllPages,
+  selectPageAction
+} from "../state/repository.actions";
 import {AppState} from "../../../app.state";
 import * as fromRepository from "../state/repository.selectors";
 import {Observable} from "rxjs";
@@ -40,7 +45,8 @@ export class PageListComponent implements OnInit,AfterViewInit {
        this.allPages$.subscribe((pages:Page[]) => {
          this.dataSource.data = pages;
        })
-     }
+     };
+    this.store.dispatch(loadAllPages());
   }
 
   ngAfterViewInit(): void {
