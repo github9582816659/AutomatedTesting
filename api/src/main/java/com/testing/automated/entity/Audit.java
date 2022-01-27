@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.bson.types.ObjectId;
 import org.springframework.data.annotation.CreatedBy;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedBy;
@@ -28,11 +29,11 @@ public class Audit {
     private Instant createdAt;
 
     @CreatedBy
-    private String createdBy;
-
-    @LastModifiedDate
-    private Instant updatedBy;
+    private ObjectId createdBy;
 
     @LastModifiedBy
-    private String updatedAt;
+    private Instant updatedAt;
+
+    @LastModifiedDate
+    private ObjectId updatedBy;
 }
