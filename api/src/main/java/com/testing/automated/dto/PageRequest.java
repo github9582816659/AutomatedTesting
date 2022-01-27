@@ -2,16 +2,16 @@ package com.testing.automated.dto;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
 import javax.validation.constraints.NotBlank;
 import java.util.List;
 
-@Builder
 @Getter
 @Setter
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class PageRequest {
 
@@ -30,4 +30,6 @@ public class PageRequest {
     private String referenceType;
     private String referenceValue;
     private List<String> tags;
+    private String createdBy;
+    private String updatedBy;
 }

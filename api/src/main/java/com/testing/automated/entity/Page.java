@@ -3,7 +3,7 @@ package com.testing.automated.entity;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.*;
 import org.bson.types.ObjectId;
-import org.springframework.data.annotation.Id;
+import org.springframework.data.annotation.*;
 import org.springframework.data.mongodb.core.index.CompoundIndex;
 import org.springframework.data.mongodb.core.index.CompoundIndexes;
 import org.springframework.data.mongodb.core.mapping.Document;
@@ -19,17 +19,17 @@ import java.util.List;
  */
 
 @Document(collection = "page")
-@Builder(toBuilder = true)
-@Getter
-@Setter
-@AllArgsConstructor
-@NoArgsConstructor
 @CompoundIndexes({
         @CompoundIndex(name = "unique_page_name", def = "{'pageName' : 1, 'projectId' : 1, 'releaseId' : 1}",
                 unique = true, sparse = true)
 })
 @JsonInclude(JsonInclude.Include.NON_NULL)
-public class Page extends Audit{
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
+public class Page {
 
     @Id
     private ObjectId pageId;

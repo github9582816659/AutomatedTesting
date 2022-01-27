@@ -27,6 +27,7 @@ public class PageServiceImpl implements PageService {
 
     @Override
     public PageResponse findPageById(String id) {
+        log.info("PageService findPageById with ID {}",id);
         try {
             Optional<Page> byId = pageRepository.findById(id);
             if (!byId.isPresent()) {
@@ -44,6 +45,7 @@ public class PageServiceImpl implements PageService {
 
     @Override
     public List<PageResponse> findAllPages() {
+        log.info("PageService findAllPages");
         try {
             List<PageResponse> pageList = new ArrayList<>();
             List<Page> all = pageRepository.findAll();
@@ -61,6 +63,7 @@ public class PageServiceImpl implements PageService {
 
     @Override
     public PageResponse savePage(PageRequest pageRequest) {
+        log.info("PageService savePage");
         try {
             Page newPage = Page.builder()
                     .pageId(new ObjectId())
@@ -85,11 +88,47 @@ public class PageServiceImpl implements PageService {
 
     @Override
     public PageResponse updatePage(String id, PageRequest pageRequest) {
-        return null;
+        log.info("PageService updatePage with ID {}",id);
+        try {
+            Optional<Page> byId = pageRepository.findById(id);
+            if (!byId.isPresent()) {
+                throw new ResourceNotFoundException("Page not found with ID: " + id);
+            }
+
+            Page page = byId.get();
+            page.setPageName(pageRequest.getPageName());
+            page.setPageDescription(pageRequest.getPageDescription());
+            page.setPageType(pageRequest.getPageType());
+            page.setIsFrame(pageRequest.getIsFrame());
+            page.setReferenceType(pageRequest.getReferenceType());
+            page.setReferenceValue(pageRequest.getReferenceValue());
+            page.setTags(pageRequest.getTags());
+
+            Page update = pageRepository.save(page);
+
+            return getPageDto(update);
+
+
+        } catch (Exception ex) {
+            log.error("Atlas Exception while updating page with ID {} {}", id , ex);
+            throw new AtlasException(Constants.ATLAS_ERROR);
+        }
     }
 
     @Override
     public void deletePageById(String id) {
+        log.info("PageService deletePageById with ID {}",id);
+        try {
+            Optional<Page> byId = pageRepository.findById(id);
+            if (!byId.isPresent()) {
+                throw new ResourceNotFoundException("Page not found with ID: " + id);
+            }
+
+            pageRepository.delete(byId.get());
+        } catch (Exception ex) {
+            log.error("Atlas Exception while deleting page with ID {} {}", id , ex);
+            throw new AtlasException(Constants.ATLAS_ERROR);
+        }
 
     }
 
