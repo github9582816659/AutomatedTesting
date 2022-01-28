@@ -9,6 +9,8 @@ import * as fromRepository from "./features/repository/state/repository.reducer"
 import { EffectsModule } from '@ngrx/effects';
 import {RepositoryEffects} from "./features/repository/state/repository.effects";
 import {HttpClientModule} from "@angular/common/http";
+import { StoreDevtoolsModule } from '@ngrx/store-devtools';
+import { environment } from '../environments/environment';
 
 @NgModule({
   declarations: [
@@ -21,7 +23,8 @@ import {HttpClientModule} from "@angular/common/http";
     AppRoutingModule,
     StoreModule.forRoot({ repository: fromRepository.repositoryReducer }),
     SharedModule,
-    EffectsModule.forRoot([RepositoryEffects])
+    EffectsModule.forRoot([RepositoryEffects]),
+    StoreDevtoolsModule.instrument({ maxAge: 25, logOnly: environment.production })
   ],
   providers: [],
   bootstrap: [AppComponent]
