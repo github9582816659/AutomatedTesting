@@ -1,13 +1,24 @@
-import { Injectable } from '@angular/core';
+import {Injectable} from '@angular/core';
 import {HttpClient} from "@angular/common/http";
 import {Page} from "../model/page.model";
+import {Components} from "../model/component.model";
+import {Observable} from "rxjs";
+
+interface PageDelete {
+  pageId: string
+}
 
 @Injectable({
   providedIn: 'root'
 })
 export class RepositoryService {
 
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient) {
+  }
+
+  // ############################################# PAGES #############################################
+  // #################################################################################################
+
 
   loadAllPages() {
     return this.http.get<Page[]>('http://localhost:8081/api/pages');
@@ -22,7 +33,15 @@ export class RepositoryService {
   }
 
   deletePage(pageId: string) {
-    return this.http.delete(`http://localhost:8081/api/pages/${pageId}`);
+    return this.http.delete<PageDelete>(`http://localhost:8081/api/pages/${pageId}`);
   }
 
+
+  // ########################################## COMPONENTS ###########################################
+  // #################################################################################################
+
+
+  loadAllComponents(pageId: string) {
+    return this.http.get<Components[]>(`http://localhost:8081/api/components/pages/${pageId}`);
+  }
 }

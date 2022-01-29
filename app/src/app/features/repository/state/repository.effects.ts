@@ -7,6 +7,8 @@ import {Page} from "../model/page.model";
 import {loadAllPages} from "./repository.actions";
 import {AppState} from "../../../app.state";
 import {Store} from "@ngrx/store";
+import {Components} from "../model/component.model";
+import {isPageSelectedSelector} from "./repository.selectors";
 
 @Injectable()
 export class RepositoryEffects {
@@ -16,6 +18,9 @@ export class RepositoryEffects {
     private store: Store<AppState>,
     private repositoryService: RepositoryService
   ) {}
+
+  // ############################################# PAGES #############################################
+  // #################################################################################################
 
   loadAllPages$ = createEffect(() => this.actions$.pipe(
       ofType(RepositoryAction.loadAllPages),
@@ -39,7 +44,7 @@ export class RepositoryEffects {
 
   updatePage$ = createEffect(() => this.actions$.pipe(
       ofType(RepositoryAction.updatePage),
-      mergeMap((acition) => this.repositoryService.updatePage(acition.pageId, acition.page)
+      mergeMap((action) => this.repositoryService.updatePage(action.pageId, action.page)
         .pipe(
           map((page:Page) => RepositoryAction.updatePageSuccess({page: page})),
           catchError((error) => of(RepositoryAction.updatePageFailure({error: error})))
@@ -51,8 +56,23 @@ export class RepositoryEffects {
       ofType(RepositoryAction.deletePage),
       mergeMap((action) => this.repositoryService.deletePage(action.pageId)
         .pipe(
-          map(() => RepositoryAction.deletePageSuccess({deleted: 'success'})),
+          map((result) => RepositoryAction.deletePageSuccess({pageId: result.pageId})),
           catchError((error) => of(RepositoryAction.deletePageFailure({error: error})))
+        ))
+    )
+  );
+
+
+  // ########################################## COMPONENTS ###########################################
+  // #################################################################################################
+
+  loadAllComponents$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(RepositoryAction.loadAllComponents),
+      mergeMap((action) => this.repositoryService.loadAllComponents(action.pageId)
+        .pipe(
+          map((components:Components[]) => RepositoryAction.loadComponentsSuccess({components: components})),
+          catchError((error) => of(RepositoryAction.loadComponentsFailure({error: error})))
         ))
     )
   );

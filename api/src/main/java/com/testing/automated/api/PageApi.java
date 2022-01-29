@@ -1,7 +1,7 @@
 package com.testing.automated.api;
 
-import com.testing.automated.dto.PageResponse;
-import com.testing.automated.dto.PageRequest;
+import com.testing.automated.dto.page.PageResponseDTO;
+import com.testing.automated.dto.page.PageRequestDTO;
 import com.testing.automated.service.PageService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -9,7 +9,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  *  Author : Rahul Choudhary
@@ -30,33 +32,35 @@ public class PageApi {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<PageResponse> findPageById(@PathVariable String id) {
+    public ResponseEntity<PageResponseDTO> findPageById(@PathVariable String id) {
         log.info("PageApi findPageById with ID {} ", id);
         return new ResponseEntity<>(pageService.findPageById(id), HttpStatus.OK);
     }
 
     @GetMapping
-    public ResponseEntity<List<PageResponse>> findAllPages() {
+    public ResponseEntity<List<PageResponseDTO>> findAllPages() {
         log.info("PageApi findAllPages ");
         return new ResponseEntity<>(pageService.findAllPages(), HttpStatus.OK);
     }
 
     @PostMapping
-    public ResponseEntity<PageResponse> savePage(@Valid @RequestBody PageRequest pageRequest) {
+    public ResponseEntity<PageResponseDTO> savePage(@Valid @RequestBody PageRequestDTO pageRequest) {
         log.info("PageApi savePage ");
         return new ResponseEntity<>(pageService.savePage(pageRequest), HttpStatus.OK);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<PageResponse> updatePage(@PathVariable String id, @RequestBody PageRequest pageRequest) {
+    public ResponseEntity<PageResponseDTO> updatePage(@PathVariable String id, @RequestBody PageRequestDTO pageRequest) {
         log.info("PageApi updatePage with ID {} ", id);
         return new ResponseEntity<>(pageService.updatePage(id, pageRequest), HttpStatus.CREATED);
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<HttpStatus> deletePageById(@PathVariable String id) {
+    public ResponseEntity<Map<String, String>> deletePageById(@PathVariable String id) {
         log.info("PageApi deletePageById with ID {} ", id);
         pageService.deletePageById(id);
-        return new ResponseEntity<>(HttpStatus.OK);
+        Map<String, String> result = new HashMap<>();
+        result.put("pageId", id);
+        return new ResponseEntity<>(result,HttpStatus.OK);
     }
 }

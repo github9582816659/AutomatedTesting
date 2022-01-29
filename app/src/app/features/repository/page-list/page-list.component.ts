@@ -6,6 +6,7 @@ import {MatPaginator} from "@angular/material/paginator";
 import {Page} from "../model/page.model";
 import {Store} from "@ngrx/store";
 import {
+  clearAllComponents,
   isAddPageClickedAction,
   isPageSelectedAction,
   loadAllPages,
@@ -33,9 +34,11 @@ export class PageListComponent implements OnInit,AfterViewInit {
   @ViewChild(MatPaginator) paginator!: MatPaginator;
 
   dataSource = new MatTableDataSource<Page>([]);
-  allPages$: Observable<Page[]> | undefined;
+  allPages$!: Observable<Page[]>;
   columnsToDisplay = ['pageName'];
-  expandedElement: Page | null | undefined;
+  expandedElement!: Page | null;
+  isPageSelected$!: Observable<boolean>;
+  isPageSelected!: boolean;
 
   constructor(private store: Store<AppState>) { }
 
@@ -46,7 +49,15 @@ export class PageListComponent implements OnInit,AfterViewInit {
          this.dataSource.data = pages;
        })
      };
+
     this.store.dispatch(loadAllPages());
+
+    this.isPageSelected$ = this.store.select<boolean>(fromRepository.isPageSelectedSelector);
+    if (this.isPageSelected$) {
+      this.isPageSelected$.subscribe((isPageSelected: boolean) => {
+        this.isPageSelected = isPageSelected;
+      });
+    }
   }
 
   ngAfterViewInit(): void {

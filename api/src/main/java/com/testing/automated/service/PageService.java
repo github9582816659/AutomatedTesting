@@ -1,15 +1,15 @@
 package com.testing.automated.service;
 
-import com.testing.automated.dto.PageRequest;
-import com.testing.automated.dto.PageResponse;
+import com.testing.automated.dto.page.PageRequestDTO;
+import com.testing.automated.dto.page.PageResponseDTO;
 
 import java.util.List;
 
 public interface PageService {
 
-    PageResponse findPageById(String id);
-    List<PageResponse> findAllPages();
-    PageResponse savePage(PageRequest pageRequest);
-    PageResponse updatePage(String id, PageRequest pageRequest);
+    PageResponseDTO findPageById(String id);
+    List<PageResponseDTO> findAllPages();
+    PageResponseDTO savePage(PageRequestDTO pageRequest);
+    PageResponseDTO updatePage(String id, PageRequestDTO pageRequest);
     void deletePageById(String id);
 }

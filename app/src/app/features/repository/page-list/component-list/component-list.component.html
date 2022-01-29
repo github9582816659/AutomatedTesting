@@ -1,7 +1,7 @@
 <mat-selection-list [multiple]="false">
   <mat-list-option *ngFor="let component of components; let i= index  " [value]="component">
-    {{component.name}}
-    <mat-divider vertical="false" *ngIf="components.length !== i+1"></mat-divider>
+    {{component?.componentName}}
+        <mat-divider vertical="false" *ngIf="components.length !== i+1"></mat-divider>
   </mat-list-option>
 </mat-selection-list>
 

@@ -7,7 +7,7 @@ import {MatChipInputEvent} from "@angular/material/chips";
 import {Store} from "@ngrx/store";
 import * as fromRepository from "../../state/repository.selectors";
 import {AppState} from "../../../../app.state";
-import {editPageAction, isAddPageClickedAction} from "../../state/repository.actions";
+import {deletePage, isAddPageClickedAction, savePage, updatePage} from "../../state/repository.actions";
 
 @Component({
   selector: 'app-page',
@@ -81,9 +81,9 @@ export class PageComponent implements OnInit, OnDestroy {
                   pageName: page?.pageName,
                   pageDescription: page?.pageDescription || '',
                   pageType: page?.pageType,
-                  isFrame: page?.isFrame,
-                  referenceType: page?.referenceType,
-                  referenceValue: page?.referenceValue,
+                  isFrame: page?.isFrame || false,
+                  referenceType: page?.referenceType || '',
+                  referenceValue: page?.referenceValue || '',
                   tags: page?.tags
                 });
 
@@ -147,38 +147,38 @@ export class PageComponent implements OnInit, OnDestroy {
     this.editMode = true;
   }
 
-  pageSubmitHandler(index?: number) {
-    console.log(this.pageForm.value);
+  pageSubmitHandler() {
+
+    const page:Page = {
+      pageId: this.pageForm.get('pageId')?.value ? this.pageForm.get('pageId')?.value : '',
+      pageMappingId: this.pageForm.get('pageMappingId')?.value ? this.pageForm.get('pageMappingId')?.value : '',
+      projectId: this.pageForm.get('projectId')?.value ? this.pageForm.get('projectId')?.value : "6166a01c77d7795b83b0b680",
+      releaseId: this.pageForm.get('releaseId')?.value ? this.pageForm.get('releaseId')?.value : "6166a01c77d7795b83b0b67e",
+      pageName: this.pageForm.get('pageName')?.value,
+      pageDescription: this.pageForm.get('pageDescription')?.value,
+      isFrame: this.pageForm.get('isFrame')?.value,
+      pageType: this.pageForm.get('isFrame')?.value ? 'PAGE' : 'FRAME',
+      referenceType: this.pageForm.get('referenceType')?.value,
+      referenceValue: this.pageForm.get('referenceValue')?.value,
+      tags: this.pageForm.get('tags')?.value,
+
+    }
 
     if (this.editMode) {
-      // Update
-      const page: Page = {
-        pageId: this.pageForm.get('_id')?.value,
-        pageMappingId: this.pageForm.get('pageMappingId')?.value,
-        projectId: this.pageForm.get('projectId')?.value,
-        releaseId: this.pageForm.get('releaseId')?.value,
-        pageName: this.pageForm.get('pageName')?.value,
-        pageDescription: this.pageForm.get('pageDescription')?.value,
-        pageType: this.pageForm.get('pageType')?.value,
-        isFrame: this.pageForm.get('isFrame')?.value,
-        referenceType: this.pageForm.get('referenceType')?.value,
-        referenceValue: this.pageForm.get('referenceValue')?.value,
-        tags: this.pageForm.get('tags')?.value
-      }
-      console.log('Edit Mode');
-      this.store.dispatch(editPageAction({page}));
+      this.store.dispatch(updatePage({pageId: page.pageId, page: page}));
       this.editMode = false;
       this.pageForm.disable();
     } else {
-      // Save
-      console.log('Create Mode');
+      this.store.dispatch(savePage({page: page}));
       this.pageForm.reset();
       this.store.dispatch(isAddPageClickedAction({isAddPageClicked: false}));
       this.hidePageForm = true;
     }
 
-
-
   }
 
+  deletePageHandler() {
+    const pageId: string = this.pageForm.get('pageId')?.value;
+    this.store.dispatch(deletePage({pageId:pageId}));
+  }
 }

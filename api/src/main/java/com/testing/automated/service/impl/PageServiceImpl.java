@@ -1,6 +1,6 @@
 package com.testing.automated.service.impl;
-import com.testing.automated.dto.PageRequest;
-import com.testing.automated.dto.PageResponse;
+import com.testing.automated.dto.page.PageRequestDTO;
+import com.testing.automated.dto.page.PageResponseDTO;
 import com.testing.automated.entity.Page;
 import com.testing.automated.exception.AtlasException;
 import com.testing.automated.exception.ResourceNotFoundException;
@@ -26,7 +26,7 @@ public class PageServiceImpl implements PageService {
     }
 
     @Override
-    public PageResponse findPageById(String id) {
+    public PageResponseDTO findPageById(String id) {
         log.info("PageService findPageById with ID {}",id);
         try {
             Optional<Page> byId = pageRepository.findById(id);
@@ -44,10 +44,10 @@ public class PageServiceImpl implements PageService {
     }
 
     @Override
-    public List<PageResponse> findAllPages() {
+    public List<PageResponseDTO> findAllPages() {
         log.info("PageService findAllPages");
         try {
-            List<PageResponse> pageList = new ArrayList<>();
+            List<PageResponseDTO> pageList = new ArrayList<>();
             List<Page> all = pageRepository.findAll();
             if (all != null && !all.isEmpty()) {
                 for (Page page: all) {
@@ -62,7 +62,7 @@ public class PageServiceImpl implements PageService {
     }
 
     @Override
-    public PageResponse savePage(PageRequest pageRequest) {
+    public PageResponseDTO savePage(PageRequestDTO pageRequest) {
         log.info("PageService savePage");
         try {
             Page newPage = Page.builder()
@@ -87,7 +87,7 @@ public class PageServiceImpl implements PageService {
     }
 
     @Override
-    public PageResponse updatePage(String id, PageRequest pageRequest) {
+    public PageResponseDTO updatePage(String id, PageRequestDTO pageRequest) {
         log.info("PageService updatePage with ID {}",id);
         try {
             Optional<Page> byId = pageRepository.findById(id);
@@ -132,7 +132,7 @@ public class PageServiceImpl implements PageService {
 
     }
 
-    private Page getPageEntity(PageRequest pageRequest) {
+    private Page getPageEntity(PageRequestDTO pageRequest) {
         return Page.builder()
                 .pageId(new ObjectId(pageRequest.getPageId()))
                 .pageMappingId(new ObjectId(pageRequest.getPageMappingId()))
@@ -148,8 +148,8 @@ public class PageServiceImpl implements PageService {
                 .build();
     }
 
-    private PageResponse getPageDto(Page page) {
-        return PageResponse.builder()
+    private PageResponseDTO getPageDto(Page page) {
+        return PageResponseDTO.builder()
                 .pageId(String.valueOf(page.getPageId()))
                 .pageMappingId(String.valueOf(page.getPageMappingId()))
                 .projectId(String.valueOf(page.getProjectId()))

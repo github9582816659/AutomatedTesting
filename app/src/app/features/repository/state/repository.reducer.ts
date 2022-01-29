@@ -1,49 +1,91 @@
 import {Page} from "../model/page.model";
 import {createReducer, on} from "@ngrx/store";
 import * as RepositoryAction from "./repository.actions";
+import {Components} from "../model/component.model";
 
 
 export interface RepositoryState {
+  // PAGES
   pages: Page[];
   selectedPage: Page | undefined;
   isPageSelected: boolean;
   isAddPageClicked: boolean;
+
+  // COMPONENTS
+  components: Components[],
+
+  // API STATUS
   error: string | null;
   status: 'pending' | 'loading' | 'error' | 'success';
 }
 
 export const initialState: RepositoryState = {
-  error: "",
+  // PAGES
+  pages: [],
   selectedPage: undefined,
-  pages: [
-    // {_id: '61e716d4d4ff42528118ea5e', pageMappingId: '61e716d4d4ff42528118ea5d', projectId: '61d580d86282242f2e9f17b0', releaseId: '61d580d86282242f2e9f17ae', pageName: 'Register', pageDescription: 'Register Page', pageType: 'PAGE', isFrame: false, referenceType: '', referenceValue: '', tags:['register', 'page']},
-    // {_id: '61e716d4d4ff42528118ea5f', pageMappingId: '61e716d4d4ff42528118ea5e', projectId: '61d580d86282242f2e9f17b1', releaseId: '61d580d86282242f2e9f17af', pageName: 'Login', pageDescription: 'Login Page', pageType: 'PAGE', isFrame: true, referenceType: 'JSPATH', referenceValue: 'login', tags:['login', 'page']},
-    // {_id: '61e716d4d4ff42528118ea5q', pageMappingId: '61e716d4d4ff42528118ea5a', projectId: '61d580d86282242f2e9f17w1', releaseId: '61d580d86282242f2e9f17ad', pageName: 'Dashboard', pageDescription: 'Dashboard Page', pageType: 'PAGE', isFrame: true, referenceType: 'XPATH', referenceValue: 'dashboard', tags:['dashboard', 'page']}
-  ],
   isPageSelected: false,
   isAddPageClicked: false,
+
+
+  // COMPONENTS
+  components: [],
+
+  // API STATUS
+  error: "",
   status: 'pending'
 };
 
 export const repositoryReducer = createReducer(
   // Supply the initial state
   initialState,
-  on(RepositoryAction.selectPageAction, (state, {page} ) => ({
+
+  // ############################################# PAGES #############################################
+  // #################################################################################################
+
+  // EVENTS
+  on(RepositoryAction.selectPageAction, (state, {page}) => ({
     ...state,
     selectedPage: page
   })),
-  on(RepositoryAction.isPageSelectedAction, (state, {isPageSelected} ) => ({
-    ...state,
-    isPageSelected: isPageSelected
-  })),
-  on(RepositoryAction.isAddPageClickedAction, (state, {isAddPageClicked} ) => ({
+  on(RepositoryAction.isPageSelectedAction, (state, {isPageSelected}) => {
+    return {
+      ...state,
+      isPageSelected: isPageSelected
+    }
+  }),
+  on(RepositoryAction.isAddPageClickedAction, (state, {isAddPageClicked}) => ({
     ...state,
     isAddPageClicked: isAddPageClicked
   })),
-  on(RepositoryAction.loadAllPages, (state ) => ({
-    ...state
+
+  // LOAD
+  on(RepositoryAction.loadPagesSuccess, (state, {pages}) => ({
+    ...state,
+    pages: pages,
+    error: null,
+    status: 'success',
   })),
-  on(RepositoryAction.editPageAction, (state, {page} ) => {
+  on(RepositoryAction.loadPagesFailure, (state, {error}) => ({
+    ...state,
+    error: error,
+    status: 'error',
+  })),
+
+  // SAVE
+  on(RepositoryAction.savePageSuccess, (state, {page}) => ({
+    ...state,
+    pages: [...state.pages, page],
+    error: null,
+    status: 'success',
+  })),
+  on(RepositoryAction.savePageFailure, (state, {error}) => ({
+    ...state,
+    error: error,
+    status: 'error',
+  })),
+
+  // UPDATE
+  on(RepositoryAction.updatePageSuccess, (state, {page}) => {
     let index = -1;
     if (page) {
       index = state.pages.findIndex(p => p.pageId === page.pageId);
@@ -62,16 +104,44 @@ export const repositoryReducer = createReducer(
       pages: updatedPages
     };
   }),
-  on(RepositoryAction.loadPagesSuccess, (state, { pages }) => ({
-    ...state,
-    pages: pages,
-    error: null,
-    status: 'success',
-  })),
-  // Handle todos load failure
-  on(RepositoryAction.loadPagesFailure, (state, { error }) => ({
+  on(RepositoryAction.updatePageFailure, (state, {error}) => ({
     ...state,
     error: error,
     status: 'error',
-  }))
+  })),
+
+  // DELETE
+  on(RepositoryAction.deletePageSuccess, (state, {pageId}) => ({
+    ...state,
+    pages: state.pages.filter((page) => {
+      return page.pageId !== pageId
+    }),
+    error: null,
+    status: 'success',
+  })),
+  on(RepositoryAction.deletePageFailure, (state, {error}) => ({
+    ...state,
+    error: error,
+    status: 'error',
+  })),
+
+
+  // ########################################## COMPONENTS ###########################################
+  // #################################################################################################
+
+  on(RepositoryAction.loadComponentsSuccess, (state, {components}) => ({
+    ...state,
+    components: components,
+    error: null,
+    status: 'success',
+  })),
+  on(RepositoryAction.clearAllComponents, (state) => ({
+    ...state,
+    components: [],
+  })),
+  on(RepositoryAction.loadComponentsFailure, (state, {error}) => ({
+    ...state,
+    error: error,
+    status: 'error',
+  })),
 );

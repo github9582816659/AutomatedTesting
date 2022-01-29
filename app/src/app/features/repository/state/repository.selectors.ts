@@ -23,3 +23,9 @@ export const allPages = createSelector(
   selectRepository,
   (state: RepositoryState) => state.pages
 );
+
+
+export const allComponents = createSelector(
+  selectRepository,
+  (state: RepositoryState) => state.components
+);

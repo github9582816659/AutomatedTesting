@@ -9,13 +9,15 @@ import {FlexLayoutModule} from "@angular/flex-layout";
 import {MaterialModule} from "../../material.module";
 import { ComponentListComponent } from './page-list/component-list/component-list.component';
 import {HttpClientModule} from "@angular/common/http";
+import { ComponentComponent } from './page-list/component-list/component/component.component';
 
 @NgModule({
   declarations: [
     RepositoryComponent,
     PageListComponent,
     PageComponent,
-    ComponentListComponent
+    ComponentListComponent,
+    ComponentComponent
   ],
   imports: [
     CommonModule,
