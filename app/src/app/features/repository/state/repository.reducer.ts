@@ -2,37 +2,41 @@ import {Page} from "../model/page.model";
 import {createReducer, on} from "@ngrx/store";
 import * as RepositoryAction from "./repository.actions";
 import {Components} from "../model/component.model";
+import {
+  //pageSelected, pageUnSelected
+} from "./repository.actions";
 
 
 export interface RepositoryState {
   // PAGES
   pages: Page[];
-  selectedPage: Page | undefined;
+  selectedPage: Page | null;
   isPageSelected: boolean;
   isAddPageClicked: boolean;
+  pageError: string | null;
+  pageStatus: 'pending' | 'loading' | 'error' | 'success';
 
   // COMPONENTS
   components: Components[],
-
-  // API STATUS
-  error: string | null;
-  status: 'pending' | 'loading' | 'error' | 'success';
+  componentError: string | null;
+  componentStatus: 'pending' | 'loading' | 'error' | 'success';
 }
 
 export const initialState: RepositoryState = {
   // PAGES
   pages: [],
-  selectedPage: undefined,
+  selectedPage: null,
   isPageSelected: false,
   isAddPageClicked: false,
+  pageError: "",
+  pageStatus: 'pending',
 
 
   // COMPONENTS
   components: [],
+  componentError: "",
+  componentStatus: 'pending'
 
-  // API STATUS
-  error: "",
-  status: 'pending'
 };
 
 export const repositoryReducer = createReducer(
@@ -43,10 +47,26 @@ export const repositoryReducer = createReducer(
   // #################################################################################################
 
   // EVENTS
-  on(RepositoryAction.selectPageAction, (state, {page}) => ({
+  on(RepositoryAction.pageSelectedAction, (state, {selected, page}) => ({
     ...state,
-    selectedPage: page
+    isPageSelected: selected,
+    selectedPage: page,
+    components: []
   })),
+  on(RepositoryAction.pageDeSelectedAction, (state) => ({
+    ...state,
+    selectedPage: null,
+    isPageSelected: false,
+    components: []
+  })),
+  // // on(RepositoryAction.selectPageAction, (state, {page}) => ({
+  // //   ...state,
+  // //   selectedPage: page
+  // // })),
+  // on(RepositoryAction.clearSelectedPage, (state) => ({
+  //   ...state,
+  //   selectedPage: null
+  // })),
   on(RepositoryAction.isPageSelectedAction, (state, {isPageSelected}) => {
     return {
       ...state,
@@ -57,35 +77,35 @@ export const repositoryReducer = createReducer(
     ...state,
     isAddPageClicked: isAddPageClicked
   })),
-
-  // LOAD
+  //
+  // // LOAD
   on(RepositoryAction.loadPagesSuccess, (state, {pages}) => ({
     ...state,
     pages: pages,
-    error: null,
-    status: 'success',
+    pageError: null,
+    pageStatus: 'success',
   })),
-  on(RepositoryAction.loadPagesFailure, (state, {error}) => ({
+  on(RepositoryAction.loadPagesFailure, (state, {pageError}) => ({
     ...state,
-    error: error,
-    status: 'error',
+    pageError: pageError,
+    pageStatus: 'error',
   })),
-
-  // SAVE
-  on(RepositoryAction.savePageSuccess, (state, {page}) => ({
+  //
+  // // SAVE
+  on(RepositoryAction.savePageSuccessAction, (state, {page}) => ({
     ...state,
     pages: [...state.pages, page],
-    error: null,
-    status: 'success',
+    pageError: null,
+    pageStatus: 'success',
   })),
-  on(RepositoryAction.savePageFailure, (state, {error}) => ({
+  on(RepositoryAction.savePageFailureAction, (state, {pageError}) => ({
     ...state,
-    error: error,
-    status: 'error',
+    pageError: pageError,
+    pageStatus: 'error',
   })),
-
-  // UPDATE
-  on(RepositoryAction.updatePageSuccess, (state, {page}) => {
+  //
+  // // UPDATE
+  on(RepositoryAction.updatePageSuccessAction, (state, {page}) => {
     let index = -1;
     if (page) {
       index = state.pages.findIndex(p => p.pageId === page.pageId);
@@ -104,44 +124,44 @@ export const repositoryReducer = createReducer(
       pages: updatedPages
     };
   }),
-  on(RepositoryAction.updatePageFailure, (state, {error}) => ({
+  on(RepositoryAction.updatePageFailureAction, (state, {pageError}) => ({
     ...state,
-    error: error,
-    status: 'error',
+    pageError: pageError,
+    pageStatus: 'error',
   })),
-
-  // DELETE
-  on(RepositoryAction.deletePageSuccess, (state, {pageId}) => ({
+  //
+  // // DELETE
+  on(RepositoryAction.deletePageSuccessAction, (state, {pageId}) => ({
     ...state,
     pages: state.pages.filter((page) => {
       return page.pageId !== pageId
     }),
-    error: null,
-    status: 'success',
+    pageError: null,
+    pageStatus: 'success',
   })),
-  on(RepositoryAction.deletePageFailure, (state, {error}) => ({
+  on(RepositoryAction.deletePageFailureAction, (state, {pageError}) => ({
     ...state,
-    error: error,
-    status: 'error',
+    pageError: pageError,
+    pageStatus: 'error',
   })),
 
 
   // ########################################## COMPONENTS ###########################################
   // #################################################################################################
 
-  on(RepositoryAction.loadComponentsSuccess, (state, {components}) => ({
+  on(RepositoryAction.loadComponentsSuccessAction, (state, {components}) => ({
     ...state,
     components: components,
-    error: null,
-    status: 'success',
+    componentError: null,
+    componentStatus: 'success',
   })),
-  on(RepositoryAction.clearAllComponents, (state) => ({
+  // on(RepositoryAction.clearAllComponents, (state) => ({
+  //   ...state,
+  //   components: [],
+  // })),
+  on(RepositoryAction.loadComponentsFailureAction, (state, {componentError}) => ({
     ...state,
-    components: [],
-  })),
-  on(RepositoryAction.loadComponentsFailure, (state, {error}) => ({
-    ...state,
-    error: error,
-    status: 'error',
+    componentError: componentError,
+    componentStatus: 'error',
   })),
 );

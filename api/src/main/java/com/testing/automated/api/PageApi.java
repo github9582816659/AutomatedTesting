@@ -2,6 +2,7 @@ package com.testing.automated.api;
 
 import com.testing.automated.dto.page.PageResponseDTO;
 import com.testing.automated.dto.page.PageRequestDTO;
+import com.testing.automated.dto.page.RepositoryResponseDTO;
 import com.testing.automated.service.PageService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -43,6 +44,12 @@ public class PageApi {
         return new ResponseEntity<>(pageService.findAllPages(), HttpStatus.OK);
     }
 
+    @GetMapping("/components/all")
+    public ResponseEntity<RepositoryResponseDTO> findAllPagesAndComponents() {
+        log.info("PageApi findAllPagesAndComponents ");
+        return new ResponseEntity<>(pageService.findAllPagesAndComponents(), HttpStatus.OK);
+    }
+
     @PostMapping
     public ResponseEntity<PageResponseDTO> savePage(@Valid @RequestBody PageRequestDTO pageRequest) {
         log.info("PageApi savePage ");
@@ -63,4 +70,6 @@ public class PageApi {
         result.put("pageId", id);
         return new ResponseEntity<>(result,HttpStatus.OK);
     }
+
+
 }

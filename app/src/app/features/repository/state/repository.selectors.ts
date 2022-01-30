@@ -4,28 +4,28 @@ import {RepositoryState} from "./repository.reducer";
 
 export const selectRepository = (state: AppState) => state.repository;
 
-export const selectedPageSelector = createSelector(
+export const selectSelectedPage = createSelector(
   selectRepository,
   (state: RepositoryState) => state.selectedPage
 );
-
-export const isPageSelectedSelector = createSelector(
+//
+export const selectIsPageSelected = createSelector(
   selectRepository,
   (state: RepositoryState) => state.isPageSelected
 );
 
-export const isAddPageClicked = createSelector(
+export const selectIsAddPageClicked = createSelector(
   selectRepository,
   (state: RepositoryState) => state.isAddPageClicked
 );
 
-export const allPages = createSelector(
+export const selectAllPages = createSelector(
   selectRepository,
   (state: RepositoryState) => state.pages
 );
-
-
-export const allComponents = createSelector(
+//
+//
+export const selectAllComponents = createSelector(
   selectRepository,
   (state: RepositoryState) => state.components
 );

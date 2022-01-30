@@ -7,7 +7,15 @@ import {MatChipInputEvent} from "@angular/material/chips";
 import {Store} from "@ngrx/store";
 import * as fromRepository from "../../state/repository.selectors";
 import {AppState} from "../../../../app.state";
-import {deletePage, isAddPageClickedAction, savePage, updatePage} from "../../state/repository.actions";
+import {
+  deletePageAction, savePageAction, updatePageAction
+  // clearSelectedPage,
+  // isPageSelectedAction,
+  // deletePage,
+  // isAddPageClickedAction,
+  // savePage,
+  // updatePage
+} from "../../state/repository.actions";
 
 @Component({
   selector: 'app-page',
@@ -31,7 +39,7 @@ export class PageComponent implements OnInit, OnDestroy {
     referenceValue: [''],
     tags: [],
   });
-  selectedPage$: Observable<Page | undefined> | undefined;
+  selectedPage$: Observable<Page | null> | undefined;
   isPageSelected$: Observable<boolean> | undefined;
   isAddPageClicked$: Observable<boolean> | undefined;
   addOnBlur = true;
@@ -45,32 +53,32 @@ export class PageComponent implements OnInit, OnDestroy {
   addMode: boolean = false;
   isPageSelected: boolean = false;
 
-  constructor(private fb: FormBuilder, private store: Store<AppState>) {}
+  constructor(private fb: FormBuilder, private store: Store<AppState>) {
+  }
 
-  ngOnInit(): void {
-    this.isAddPageClicked$ = this.store.select<boolean>(fromRepository.isAddPageClicked);
-    if (this.isAddPageClicked$) {
-      this.isAddPageClicked$.subscribe((isAddPageClicked: boolean) => {
-        if (isAddPageClicked) {
-          this.addMode = isAddPageClicked;
-          this.isPageSelected = false;
-          this.pageForm.reset();
-          this.pageForm.enable();
-          this.tags = [];
-          this.hidePageForm = false;
-        }
-      })
-    }
+  ngOnInit() {
 
-    this.isPageSelected$ = this.store.select<boolean>(fromRepository.isPageSelectedSelector);
+    this.store.select<boolean>(fromRepository.selectIsAddPageClicked).subscribe((isAddPageClicked: boolean) => {
+      if (isAddPageClicked) {
+        this.addMode = isAddPageClicked;
+        this.isPageSelected = false;
+        this.pageForm.reset();
+        this.pageForm.enable();
+        this.tags = [];
+        this.hidePageForm = false;
+      }
+    });
+
+    this.isPageSelected$ = this.store.select<boolean>(fromRepository.selectIsPageSelected);
     if ( this.isPageSelected$) {
       this.isPageSelected$.subscribe((isPageSelected: boolean) => {
         // When Page is expand_more
         if (isPageSelected) {
           this.isPageSelected = isPageSelected;
-          this.selectedPage$ = this.store.select<Page | undefined>(fromRepository.selectedPageSelector);
+
+          this.selectedPage$ = this.store.select<Page | null>(fromRepository.selectSelectedPage);
           if (this.selectedPage$) {
-            this.selectedPage$.subscribe((page: Page | undefined) => {
+            this.selectedPage$.subscribe((page: Page | null) => {
               // Set Value to Form
               if (page) {
                 this.pageForm.setValue({
@@ -91,7 +99,7 @@ export class PageComponent implements OnInit, OnDestroy {
                 this.tags = [];
 
                 if (page.tags) {
-                this.tags.push(...page.tags) ;
+                  this.tags.push(...page.tags) ;
                 }
 
                 // Show Form
@@ -105,12 +113,55 @@ export class PageComponent implements OnInit, OnDestroy {
           }
         } else {
           // When Page is expand_less
+
           this.isPageSelected = false;
           this.hidePageForm = true;
           this.pageForm.reset();
         }
       });
     }
+
+    // this.store.select<boolean>(fromRepository.isPageSelectedSelector).subscribe(isPageSelected => {
+    //   console.log('PAGE COMPONENT -> PAGE SELECTOR ')
+    //   this.isPageSelected = isPageSelected;
+    // });
+    //
+    // this.store.select<Page | null>(fromRepository.selectedPageSelector).subscribe((page: Page|null) => {
+    //   console.log('SELECTED PAGE IS ' + page?.pageName);
+    //   if (this.isPageSelected && page) {
+    //     console.log('SELECTED PAGE IS NOT NULL');
+    //     this.pageForm.setValue({
+    //       pageId: page?.pageId,
+    //       pageMappingId: page?.pageMappingId,
+    //       projectId: page?.projectId,
+    //       releaseId: page?.releaseId,
+    //       pageName: page?.pageName,
+    //       pageDescription: page?.pageDescription || '',
+    //       pageType: page?.pageType,
+    //       isFrame: page?.isFrame || false,
+    //       referenceType: page?.referenceType || '',
+    //       referenceValue: page?.referenceValue || '',
+    //       tags: page?.tags
+    //     });
+    //
+    //     // Update Tags Array
+    //     this.tags = [];
+    //
+    //     if (page.tags) {
+    //       this.tags.push(...page.tags);
+    //     }
+    //
+    //     // Show Form
+    //     this.hidePageForm = false;
+    //
+    //     // Disable Form
+    //     this.pageForm.disable();
+    //   } else {
+    //     console.log('SELECTED PAGE IS NULL');
+    //     this.pageForm.reset();
+    //     this.hidePageForm = true;
+    //   }
+    // });
 
   }
 
@@ -147,9 +198,9 @@ export class PageComponent implements OnInit, OnDestroy {
     this.editMode = true;
   }
 
-  pageSubmitHandler() {
+   pageSubmitHandler() {
 
-    const page:Page = {
+    const page: Page = {
       pageId: this.pageForm.get('pageId')?.value ? this.pageForm.get('pageId')?.value : '',
       pageMappingId: this.pageForm.get('pageMappingId')?.value ? this.pageForm.get('pageMappingId')?.value : '',
       projectId: this.pageForm.get('projectId')?.value ? this.pageForm.get('projectId')?.value : "6166a01c77d7795b83b0b680",
@@ -165,20 +216,20 @@ export class PageComponent implements OnInit, OnDestroy {
     }
 
     if (this.editMode) {
-      this.store.dispatch(updatePage({pageId: page.pageId, page: page}));
+      this.store.dispatch(updatePageAction({pageId: page.pageId, page: page}));
       this.editMode = false;
       this.pageForm.disable();
     } else {
-      this.store.dispatch(savePage({page: page}));
+      this.store.dispatch(savePageAction({page: page}));
       this.pageForm.reset();
-      this.store.dispatch(isAddPageClickedAction({isAddPageClicked: false}));
+      //this.store.dispatch(isAddPageClickedAction({isAddPageClicked: false}));
       this.hidePageForm = true;
     }
 
-  }
+   }
 
-  deletePageHandler() {
+   deletePageHandler() {
     const pageId: string = this.pageForm.get('pageId')?.value;
-    this.store.dispatch(deletePage({pageId:pageId}));
-  }
+    this.store.dispatch(deletePageAction({pageId: pageId}));
+   }
 }

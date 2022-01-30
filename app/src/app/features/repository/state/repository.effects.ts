@@ -1,14 +1,12 @@
 import {Injectable} from "@angular/core";
 import {Actions, createEffect, ofType} from "@ngrx/effects";
-import {catchError, map, mergeMap, of, withLatestFrom} from "rxjs";
+import {catchError, map, mergeMap, of} from "rxjs";
 import * as RepositoryAction from "./repository.actions";
 import {RepositoryService} from "../service/repository.service";
 import {Page} from "../model/page.model";
-import {loadAllPages} from "./repository.actions";
 import {AppState} from "../../../app.state";
 import {Store} from "@ngrx/store";
 import {Components} from "../model/component.model";
-import {isPageSelectedSelector} from "./repository.selectors";
 
 @Injectable()
 export class RepositoryEffects {
@@ -23,41 +21,41 @@ export class RepositoryEffects {
   // #################################################################################################
 
   loadAllPages$ = createEffect(() => this.actions$.pipe(
-      ofType(RepositoryAction.loadAllPages),
+      ofType(RepositoryAction.loadAllPagesAction),
       mergeMap(() => this.repositoryService.loadAllPages()
         .pipe(
           map((pages:Page[]) => RepositoryAction.loadPagesSuccess({pages: pages})),
-          catchError((error) => of(RepositoryAction.loadPagesFailure({error: error})))
+          catchError((error) => of(RepositoryAction.loadPagesFailure({pageError: error})))
         ))
     )
   );
-
+  //
   savePage$ = createEffect(() => this.actions$.pipe(
-      ofType(RepositoryAction.savePage),
+      ofType(RepositoryAction.savePageAction),
       mergeMap((action) => this.repositoryService.savePage(action.page)
         .pipe(
-          map((page:Page) => RepositoryAction.savePageSuccess({page: page})),
-          catchError((error) => of(RepositoryAction.savePageFailure({error: error})))
+          map((page:Page) => RepositoryAction.savePageSuccessAction({page: page})),
+          catchError((error) => of(RepositoryAction.savePageFailureAction({pageError: error})))
         ))
     )
   );
 
   updatePage$ = createEffect(() => this.actions$.pipe(
-      ofType(RepositoryAction.updatePage),
+      ofType(RepositoryAction.updatePageAction),
       mergeMap((action) => this.repositoryService.updatePage(action.pageId, action.page)
         .pipe(
-          map((page:Page) => RepositoryAction.updatePageSuccess({page: page})),
-          catchError((error) => of(RepositoryAction.updatePageFailure({error: error})))
+          map((page:Page) => RepositoryAction.updatePageSuccessAction({page: page})),
+          catchError((error) => of(RepositoryAction.updatePageFailureAction({pageError: error})))
         ))
     )
   );
-
+  //
   deletePage$ = createEffect(() => this.actions$.pipe(
-      ofType(RepositoryAction.deletePage),
+      ofType(RepositoryAction.deletePageAction),
       mergeMap((action) => this.repositoryService.deletePage(action.pageId)
         .pipe(
-          map((result) => RepositoryAction.deletePageSuccess({pageId: result.pageId})),
-          catchError((error) => of(RepositoryAction.deletePageFailure({error: error})))
+          map((result) => RepositoryAction.deletePageSuccessAction({pageId: result.pageId})),
+          catchError((error) => of(RepositoryAction.deletePageFailureAction({pageError: error})))
         ))
     )
   );
@@ -68,11 +66,11 @@ export class RepositoryEffects {
 
   loadAllComponents$ = createEffect(() =>
     this.actions$.pipe(
-      ofType(RepositoryAction.loadAllComponents),
+      ofType(RepositoryAction.loadAllComponentsAction),
       mergeMap((action) => this.repositoryService.loadAllComponents(action.pageId)
         .pipe(
-          map((components:Components[]) => RepositoryAction.loadComponentsSuccess({components: components})),
-          catchError((error) => of(RepositoryAction.loadComponentsFailure({error: error})))
+          map((components:Components[]) => RepositoryAction.loadComponentsSuccessAction({components: components})),
+          catchError((error) => of(RepositoryAction.loadComponentsFailureAction({componentError: error})))
         ))
     )
   );

@@ -6,26 +6,39 @@ import {Components} from "../model/component.model";
 // ##################################################  EVENTS  ###############################################
 // ###########################################################################################################
 
-export const selectPageAction = createAction(
-  '[Repository Page] Select Page',
-  props<{ page: Page | undefined }>()
+// export const selectPageAction = createAction(
+//   '[Repository Page] Select Page',
+//   props<{ page: Page }>()
+// );
+
+export const pageSelectedAction = createAction(
+  '[REPOSITORY PAGE] SELECT PAGE',
+  props<{ selected: boolean, page: Page | null }>()
 );
 
+export const pageDeSelectedAction = createAction(
+  '[REPOSITORY PAGE] UNSELECT PAGE'
+);
+//
+// export const clearSelectedPage = createAction(
+//   '[Repository Page] Clear Select Page'
+// );
+//
 export const isPageSelectedAction = createAction(
   '[Repository Page] Is Page Selected',
   props<{ isPageSelected: boolean }>()
 );
 
 export const isAddPageClickedAction = createAction(
-  '[Repository Page] Add Page Clicked',
+  '[Repository Page] Is Add Page Clicked',
   props<{ isAddPageClicked: boolean }>()
 );
 
 // ################################################ LOAD ALL PAGES ###########################################
 // ###########################################################################################################
 
-export const loadAllPages = createAction(
-  '[Repository Page] All Pages'
+export const loadAllPagesAction = createAction(
+  '[REPOSITORY PAGE] LOAD ALL PAGES'
 );
 
 export const loadPagesSuccess = createAction(
@@ -35,85 +48,82 @@ export const loadPagesSuccess = createAction(
 
 export const loadPagesFailure = createAction(
   '[Repository Page API] Pages Load Failure',
-  props<{ error: string }>()
+  props<{ pageError: string }>()
 );
 
 // ################################################ SAVE PAGE ################################################
 // ###########################################################################################################
 
-export const savePage = createAction(
+export const savePageAction = createAction(
   '[Repository Page] Save Page',
   props<{ page: Page }>()
 );
 
-export const savePageSuccess = createAction(
+export const savePageSuccessAction = createAction(
   '[Repository Page API] Save Page Success',
   props<{ page: Page }>()
 );
 
-export const savePageFailure = createAction(
+export const savePageFailureAction = createAction(
   '[Repository Page API] Save Page Failure',
-  props<{ error: string }>()
+  props<{ pageError: string }>()
 );
 
 // ################################################ UPDATE PAGE ################################################
 // #############################################################################################################
 
-export const updatePage = createAction(
+export const updatePageAction = createAction(
   '[Repository Page] Update Page',
   props<{ pageId: string, page: Page }>()
 );
 
-export const updatePageSuccess = createAction(
+export const updatePageSuccessAction = createAction(
   '[Repository Page API] Update Page Success',
   props<{ page: Page }>()
 );
 
-export const updatePageFailure = createAction(
+export const updatePageFailureAction = createAction(
   '[Repository Page API] Update Page Failure',
-  props<{ error: string }>()
+  props<{ pageError: string }>()
 );
 
 // ################################################ DELETE PAGE ################################################
 // #############################################################################################################
 
-export const deletePage = createAction(
+export const deletePageAction = createAction(
   '[Repository Page] Delete Page',
   props<{ pageId: string }>()
 );
 
-export const deletePageSuccess = createAction(
+export const deletePageSuccessAction = createAction(
   '[Repository Page API] Delete Page Success',
   props<{ pageId: string }>()
 );
 
-export const deletePageFailure = createAction(
+export const deletePageFailureAction = createAction(
   '[Repository Page API] Delete Page Failure',
-  props<{ error: string }>()
+  props<{ pageError: string }>()
 );
-
-
-
 
 
 // ################################################ LOAD ALL COMPONENTS ######################################
 // ###########################################################################################################
 
-export const loadAllComponents = createAction(
-  '[Repository Component] Load All Components',
+export const loadAllComponentsAction = createAction(
+  '[Repository Component] Load All Components with PageID',
   props<{ pageId: string }>()
 );
-export const clearAllComponents = createAction(
-  '[Repository Component] Clear All Components'
-);
-
-export const loadComponentsSuccess = createAction(
+// export const clearAllComponents = createAction(
+//   '[Repository Component] Clear All Components'
+// );
+//
+export const loadComponentsSuccessAction = createAction(
   '[Repository Component API] Components Load Success',
   props<{ components: Components[] }>()
 );
 
-export const loadComponentsFailure = createAction(
+export const loadComponentsFailureAction = createAction(
   '[Repository Component API] Components Load Failure',
-  props<{ error: string }>()
+  props<{ componentError: string }>()
 );
 

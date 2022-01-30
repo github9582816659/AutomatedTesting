@@ -6,11 +6,14 @@ import {MatPaginator} from "@angular/material/paginator";
 import {Page} from "../model/page.model";
 import {Store} from "@ngrx/store";
 import {
-  clearAllComponents,
   isAddPageClickedAction,
   isPageSelectedAction,
-  loadAllPages,
-  selectPageAction
+  loadAllPagesAction, pageDeSelectedAction, pageSelectedAction
+  // clearAllComponents, clearSelectedPage,
+  // isAddPageClickedAction,
+  // isPageSelectedAction,
+  // loadAllPages, pageSelected, pageUnSelected,
+  //selectPageAction
 } from "../state/repository.actions";
 import {AppState} from "../../../app.state";
 import * as fromRepository from "../state/repository.selectors";
@@ -43,21 +46,27 @@ export class PageListComponent implements OnInit,AfterViewInit {
   constructor(private store: Store<AppState>) { }
 
   ngOnInit(): void {
-     this.allPages$ = this.store.select<Page[]>(fromRepository.allPages);
-     if (this.allPages$) {
-       this.allPages$.subscribe((pages:Page[]) => {
-         this.dataSource.data = pages;
-       })
-     };
+    //  this.allPages$ = this.store.select<Page[]>(fromRepository.allPages);
+    //  if (this.allPages$) {
+    //    this.allPages$.subscribe((pages:Page[]) => {
+    //      this.dataSource.data = pages;
+    //    })
+    //  };
+    //
+    // this.store.dispatch(loadAllPages());
+    //
+    // this.isPageSelected$ = this.store.select<boolean>(fromRepository.isPageSelectedSelector);
+    // if (this.isPageSelected$) {
+    //   this.isPageSelected$.subscribe((isPageSelected: boolean) => {
+    //     this.isPageSelected = isPageSelected;
+    //   });
+    // }
 
-    this.store.dispatch(loadAllPages());
+     this.store.dispatch(loadAllPagesAction());
 
-    this.isPageSelected$ = this.store.select<boolean>(fromRepository.isPageSelectedSelector);
-    if (this.isPageSelected$) {
-      this.isPageSelected$.subscribe((isPageSelected: boolean) => {
-        this.isPageSelected = isPageSelected;
-      });
-    }
+    this.store.select<Page[]>(fromRepository.selectAllPages).subscribe((pages:Page[]) => {
+      this.dataSource.data = pages;
+    });
   }
 
   ngAfterViewInit(): void {
@@ -70,22 +79,32 @@ export class PageListComponent implements OnInit,AfterViewInit {
     this.dataSource.filter = filterValue.trim().toLowerCase();
   }
 
-  tableExpandHandler(element: any, expandedElement: any) {
-    if (expandedElement && (expandedElement === element)) {
-      console.log('CLOSE')
+  tableExpandHandler(element: any, expandedElement: any, column: string, i: number) {
+    if (expandedElement?.pageId === element?.pageId) {
+      console.log('PAGE CLOSE')
       this.store.dispatch(isPageSelectedAction({isPageSelected: false}));
-    } else {
-      console.log('OPEN')
-      this.store.dispatch(isPageSelectedAction({isPageSelected: true}));
       this.store.dispatch(isAddPageClickedAction({isAddPageClicked: false}));
+      //this.store.dispatch(clearSelectedPage())
+      console.log("********** STORE DISPATCH **********")
+      this.store.dispatch(pageDeSelectedAction());
+      console.log("********** STORE DISPATCH **********")
+    } else if (expandedElement?.pageId !== element?.pageId) {
+      console.log('PAGE OPEN')
+      //this.store.dispatch(isPageSelectedAction({isPageSelected: true}));
+      //this.store.dispatch(isAddPageClickedAction({isAddPageClicked: false}));
+      //this.store.dispatch(selectPageAction({page: element}));
+      console.log("********** STORE DISPATCH **********")
+      console.log('ELEMENT ' + JSON.stringify(element))
+      this.store.dispatch(pageSelectedAction({selected: true, page: element}));
+      console.log("********** STORE DISPATCH **********")
     }
 
     this.expandedElement = this.expandedElement === element ? null : element;
-    this.store.dispatch(selectPageAction({page: element}));
+
   }
 
   addPageClickHandler() {
-    this.store.dispatch(isPageSelectedAction({isPageSelected: false}));
-    this.store.dispatch(isAddPageClickedAction({isAddPageClicked: true}));
+   this.store.dispatch(isPageSelectedAction({isPageSelected: false}));
+   this.store.dispatch(isAddPageClickedAction({isAddPageClicked: true}));
   }
 }
