@@ -9,11 +9,6 @@ import {
   isAddPageClickedAction,
   isPageSelectedAction,
   loadAllPagesAction, pageDeSelectedAction, pageSelectedAction
-  // clearAllComponents, clearSelectedPage,
-  // isAddPageClickedAction,
-  // isPageSelectedAction,
-  // loadAllPages, pageSelected, pageUnSelected,
-  //selectPageAction
 } from "../state/repository.actions";
 import {AppState} from "../../../app.state";
 import * as fromRepository from "../state/repository.selectors";
@@ -37,7 +32,6 @@ export class PageListComponent implements OnInit,AfterViewInit {
   @ViewChild(MatPaginator) paginator!: MatPaginator;
 
   dataSource = new MatTableDataSource<Page>([]);
-  allPages$!: Observable<Page[]>;
   columnsToDisplay = ['pageName'];
   expandedElement!: Page | null;
   isPageSelected$!: Observable<boolean>;
@@ -46,22 +40,6 @@ export class PageListComponent implements OnInit,AfterViewInit {
   constructor(private store: Store<AppState>) { }
 
   ngOnInit(): void {
-    //  this.allPages$ = this.store.select<Page[]>(fromRepository.allPages);
-    //  if (this.allPages$) {
-    //    this.allPages$.subscribe((pages:Page[]) => {
-    //      this.dataSource.data = pages;
-    //    })
-    //  };
-    //
-    // this.store.dispatch(loadAllPages());
-    //
-    // this.isPageSelected$ = this.store.select<boolean>(fromRepository.isPageSelectedSelector);
-    // if (this.isPageSelected$) {
-    //   this.isPageSelected$.subscribe((isPageSelected: boolean) => {
-    //     this.isPageSelected = isPageSelected;
-    //   });
-    // }
-
      this.store.dispatch(loadAllPagesAction());
 
     this.store.select<Page[]>(fromRepository.selectAllPages).subscribe((pages:Page[]) => {
@@ -81,22 +59,11 @@ export class PageListComponent implements OnInit,AfterViewInit {
 
   tableExpandHandler(element: any, expandedElement: any, column: string, i: number) {
     if (expandedElement?.pageId === element?.pageId) {
-      console.log('PAGE CLOSE')
       this.store.dispatch(isPageSelectedAction({isPageSelected: false}));
       this.store.dispatch(isAddPageClickedAction({isAddPageClicked: false}));
-      //this.store.dispatch(clearSelectedPage())
-      console.log("********** STORE DISPATCH **********")
       this.store.dispatch(pageDeSelectedAction());
-      console.log("********** STORE DISPATCH **********")
     } else if (expandedElement?.pageId !== element?.pageId) {
-      console.log('PAGE OPEN')
-      //this.store.dispatch(isPageSelectedAction({isPageSelected: true}));
-      //this.store.dispatch(isAddPageClickedAction({isAddPageClicked: false}));
-      //this.store.dispatch(selectPageAction({page: element}));
-      console.log("********** STORE DISPATCH **********")
-      console.log('ELEMENT ' + JSON.stringify(element))
       this.store.dispatch(pageSelectedAction({selected: true, page: element}));
-      console.log("********** STORE DISPATCH **********")
     }
 
     this.expandedElement = this.expandedElement === element ? null : element;

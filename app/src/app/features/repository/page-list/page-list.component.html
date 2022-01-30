@@ -38,7 +38,6 @@
             <div class="example-element-detail"
                  [@detailExpand]="element == expandedElement ? 'expanded' : 'collapsed'">
               <div style="width: 100%" *ngIf="expandedElement == element">
-                <!--<app-component-list *ngIf="expandedElement?.pageId === element?.pageId" [page]="element"></app-component-list>-->
                 <app-component-list *ngIf="expandedElement == element" [element] = element></app-component-list>
               </div>
             </div>

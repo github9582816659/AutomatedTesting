@@ -9,12 +9,6 @@ import * as fromRepository from "../../state/repository.selectors";
 import {AppState} from "../../../../app.state";
 import {
   deletePageAction, savePageAction, updatePageAction
-  // clearSelectedPage,
-  // isPageSelectedAction,
-  // deletePage,
-  // isAddPageClickedAction,
-  // savePage,
-  // updatePage
 } from "../../state/repository.actions";
 
 @Component({
@@ -72,10 +66,9 @@ export class PageComponent implements OnInit, OnDestroy {
     this.isPageSelected$ = this.store.select<boolean>(fromRepository.selectIsPageSelected);
     if ( this.isPageSelected$) {
       this.isPageSelected$.subscribe((isPageSelected: boolean) => {
-        // When Page is expand_more
         if (isPageSelected) {
+          // PAGE OPEN
           this.isPageSelected = isPageSelected;
-
           this.selectedPage$ = this.store.select<Page | null>(fromRepository.selectSelectedPage);
           if (this.selectedPage$) {
             this.selectedPage$.subscribe((page: Page | null) => {
@@ -112,56 +105,13 @@ export class PageComponent implements OnInit, OnDestroy {
             });
           }
         } else {
-          // When Page is expand_less
-
+          // PAGE CLOSE
           this.isPageSelected = false;
           this.hidePageForm = true;
           this.pageForm.reset();
         }
       });
     }
-
-    // this.store.select<boolean>(fromRepository.isPageSelectedSelector).subscribe(isPageSelected => {
-    //   console.log('PAGE COMPONENT -> PAGE SELECTOR ')
-    //   this.isPageSelected = isPageSelected;
-    // });
-    //
-    // this.store.select<Page | null>(fromRepository.selectedPageSelector).subscribe((page: Page|null) => {
-    //   console.log('SELECTED PAGE IS ' + page?.pageName);
-    //   if (this.isPageSelected && page) {
-    //     console.log('SELECTED PAGE IS NOT NULL');
-    //     this.pageForm.setValue({
-    //       pageId: page?.pageId,
-    //       pageMappingId: page?.pageMappingId,
-    //       projectId: page?.projectId,
-    //       releaseId: page?.releaseId,
-    //       pageName: page?.pageName,
-    //       pageDescription: page?.pageDescription || '',
-    //       pageType: page?.pageType,
-    //       isFrame: page?.isFrame || false,
-    //       referenceType: page?.referenceType || '',
-    //       referenceValue: page?.referenceValue || '',
-    //       tags: page?.tags
-    //     });
-    //
-    //     // Update Tags Array
-    //     this.tags = [];
-    //
-    //     if (page.tags) {
-    //       this.tags.push(...page.tags);
-    //     }
-    //
-    //     // Show Form
-    //     this.hidePageForm = false;
-    //
-    //     // Disable Form
-    //     this.pageForm.disable();
-    //   } else {
-    //     console.log('SELECTED PAGE IS NULL');
-    //     this.pageForm.reset();
-    //     this.hidePageForm = true;
-    //   }
-    // });
 
   }
 
@@ -222,7 +172,6 @@ export class PageComponent implements OnInit, OnDestroy {
     } else {
       this.store.dispatch(savePageAction({page: page}));
       this.pageForm.reset();
-      //this.store.dispatch(isAddPageClickedAction({isAddPageClicked: false}));
       this.hidePageForm = true;
     }
 
