@@ -1,0 +1,9 @@
+.idea
+
+api/.idea
+api/target
+
+app/.angular
+app/.idea
+app/.vscode
+app/node_modules
