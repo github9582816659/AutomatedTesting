@@ -8,7 +8,6 @@ import {
 import {Page} from "../../model/page.model";
 import {Observable} from "rxjs";
 import * as fromRepository from "../../state/repository.selectors";
-import {selectComponentStatus} from "../../state/repository.selectors";
 
 @Component({
   selector: 'app-component-list',
