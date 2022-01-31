@@ -14,6 +14,6 @@ import java.util.List;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class RepositoryResponseDTO {
 
-    private List<RepositoryPagesDTO> pages;
+    private List<RepositoryPagesDTO> repository;
 
 }
