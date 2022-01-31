@@ -8,6 +8,7 @@ import {
 import {Page} from "../../model/page.model";
 import {Observable} from "rxjs";
 import * as fromRepository from "../../state/repository.selectors";
+import {selectComponentStatus} from "../../state/repository.selectors";
 
 @Component({
   selector: 'app-component-list',
@@ -20,6 +21,7 @@ export class ComponentListComponent implements OnInit {
   allComponents$: Observable<Components[]> = this.store.select<Components[]>(fromRepository.selectAllComponents);
   components: Components[] = []
   isPageSelected$: Observable<boolean> | undefined;
+  isLoading$: Observable<"pending" | "loading" | "success" | "error"> = this.store.select<"pending" | "loading" | "success" | "error">(fromRepository.selectComponentStatus);
 
   constructor(private store: Store<AppState>) {
   }
@@ -32,7 +34,6 @@ export class ComponentListComponent implements OnInit {
         if (pageId) {
           this.store.dispatch(loadAllComponentsAction({pageId: pageId}));
         }
-
       } else {
         this.element = null;
       }

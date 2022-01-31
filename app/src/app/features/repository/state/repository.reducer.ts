@@ -149,16 +149,16 @@ export const repositoryReducer = createReducer(
   // ########################################## COMPONENTS ###########################################
   // #################################################################################################
 
+  on(RepositoryAction.loadAllComponentsAction, (state) => ({
+    ...state,
+    componentStatus: 'loading',
+  })),
   on(RepositoryAction.loadComponentsSuccessAction, (state, {components}) => ({
     ...state,
     components: components,
     componentError: null,
     componentStatus: 'success',
   })),
-  // on(RepositoryAction.clearAllComponents, (state) => ({
-  //   ...state,
-  //   components: [],
-  // })),
   on(RepositoryAction.loadComponentsFailureAction, (state, {componentError}) => ({
     ...state,
     componentError: componentError,

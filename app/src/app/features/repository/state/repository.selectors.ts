@@ -8,7 +8,7 @@ export const selectSelectedPage = createSelector(
   selectRepository,
   (state: RepositoryState) => state.selectedPage
 );
-//
+
 export const selectIsPageSelected = createSelector(
   selectRepository,
   (state: RepositoryState) => state.isPageSelected
@@ -23,9 +23,14 @@ export const selectAllPages = createSelector(
   selectRepository,
   (state: RepositoryState) => state.pages
 );
-//
-//
+
+
 export const selectAllComponents = createSelector(
   selectRepository,
   (state: RepositoryState) => state.components
+);
+
+export const selectComponentStatus = createSelector(
+  selectRepository,
+  (state: RepositoryState) => state.componentStatus
 );

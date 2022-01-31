@@ -1,9 +1,14 @@
 <mat-selection-list [multiple]="false">
   <mat-list-option *ngFor="let component of allComponents$|async; let i= index  " [value]="component">
     {{component?.componentName}}
-        <mat-divider vertical="false" *ngIf="(allComponents$|async)?.length !== i+1"></mat-divider>
+    <mat-divider vertical="false" *ngIf="(allComponents$|async)?.length !== i+1"></mat-divider>
   </mat-list-option>
 </mat-selection-list>
+
+<div fxLayout="row" fxLayoutAlign="center center">
+  <mat-spinner *ngIf="(isLoading$|async) === 'loading'" diameter="50"></mat-spinner>
+</div>
+
 
 
 
