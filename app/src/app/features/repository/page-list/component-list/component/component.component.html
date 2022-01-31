@@ -1,1 +1,21 @@
-<p>component works!</p>
+<div *ngIf="!hideComponentForm">
+
+  <div fxLayout="row" fxLayoutAlign="space-between center" fxLayoutGap="5px">
+
+    <div fxLayout="column" fxLayoutAlign="center center">
+      <h3>Component Name: {{componentForm?.get('componentName')?.value}}</h3>
+    </div>
+
+    <div fxLayoutGap="5px">
+      <button mat-flat-button
+              color="primary"
+              type="button"
+              (click)="editComponentClickHandler()">Edit</button>
+      <button mat-flat-button
+              color="primary"
+              (click)="deleteComponentHandler()"
+              type="button" >Delete</button>
+    </div>
+  </div>
+
+</div>

@@ -6,31 +6,22 @@ import {Components} from "../model/component.model";
 // ##################################################  EVENTS  ###############################################
 // ###########################################################################################################
 
-// export const selectPageAction = createAction(
-//   '[Repository Page] Select Page',
-//   props<{ page: Page }>()
-// );
-
 export const pageSelectedAction = createAction(
-  '[REPOSITORY PAGE] SELECT PAGE',
+  '[REPOSITORY PAGE] Select Page',
   props<{ selected: boolean, page: Page | null }>()
 );
 
 export const pageDeSelectedAction = createAction(
-  '[REPOSITORY PAGE] UNSELECT PAGE'
+  '[REPOSITORY PAGE] UnSelect Page'
 );
-//
-// export const clearSelectedPage = createAction(
-//   '[Repository Page] Clear Select Page'
-// );
-//
+
 export const isPageSelectedAction = createAction(
-  '[Repository Page] Is Page Selected',
+  '[REPOSITORY PAGE] Is Page Selected',
   props<{ isPageSelected: boolean }>()
 );
 
 export const isAddPageClickedAction = createAction(
-  '[Repository Page] Is Add Page Clicked',
+  '[REPOSITORY PAGE] Is Add Page Clicked',
   props<{ isAddPageClicked: boolean }>()
 );
 
@@ -38,16 +29,16 @@ export const isAddPageClickedAction = createAction(
 // ###########################################################################################################
 
 export const loadAllPagesAction = createAction(
-  '[REPOSITORY PAGE] LOAD ALL PAGES'
+  '[REPOSITORY PAGE] Load All Pages'
 );
 
 export const loadPagesSuccess = createAction(
-  '[Repository Page API] Pages Load Success',
+  '[REPOSITORY PAGE API] Pages Load Success',
   props<{ pages: Page[] }>()
 );
 
 export const loadPagesFailure = createAction(
-  '[Repository Page API] Pages Load Failure',
+  '[REPOSITORY PAGE API] Pages Load Failure',
   props<{ pageError: string }>()
 );
 
@@ -55,17 +46,17 @@ export const loadPagesFailure = createAction(
 // ###########################################################################################################
 
 export const savePageAction = createAction(
-  '[Repository Page] Save Page',
+  '[REPOSITORY PAGE] Save Page',
   props<{ page: Page }>()
 );
 
 export const savePageSuccessAction = createAction(
-  '[Repository Page API] Save Page Success',
+  '[REPOSITORY PAGE API] Save Page Success',
   props<{ page: Page }>()
 );
 
 export const savePageFailureAction = createAction(
-  '[Repository Page API] Save Page Failure',
+  '[REPOSITORY PAGE API] Save Page Failure',
   props<{ pageError: string }>()
 );
 
@@ -73,17 +64,17 @@ export const savePageFailureAction = createAction(
 // #############################################################################################################
 
 export const updatePageAction = createAction(
-  '[Repository Page] Update Page',
+  '[REPOSITORY PAGE] Update Page',
   props<{ pageId: string, page: Page }>()
 );
 
 export const updatePageSuccessAction = createAction(
-  '[Repository Page API] Update Page Success',
+  '[REPOSITORY PAGE API] Update Page Success',
   props<{ page: Page }>()
 );
 
 export const updatePageFailureAction = createAction(
-  '[Repository Page API] Update Page Failure',
+  '[REPOSITORY PAGE API] Update Page Failure',
   props<{ pageError: string }>()
 );
 
@@ -91,17 +82,17 @@ export const updatePageFailureAction = createAction(
 // #############################################################################################################
 
 export const deletePageAction = createAction(
-  '[Repository Page] Delete Page',
+  '[REPOSITORY PAGE] Delete Page',
   props<{ pageId: string }>()
 );
 
 export const deletePageSuccessAction = createAction(
-  '[Repository Page API] Delete Page Success',
+  '[REPOSITORY PAGE API] Delete Page Success',
   props<{ pageId: string }>()
 );
 
 export const deletePageFailureAction = createAction(
-  '[Repository Page API] Delete Page Failure',
+  '[REPOSITORY PAGE API] Delete Page Failure',
   props<{ pageError: string }>()
 );
 
@@ -113,10 +104,7 @@ export const loadAllComponentsAction = createAction(
   '[Repository Component] Load All Components with PageID',
   props<{ pageId: string }>()
 );
-// export const clearAllComponents = createAction(
-//   '[Repository Component] Clear All Components'
-// );
-//
+
 export const loadComponentsSuccessAction = createAction(
   '[Repository Component API] Components Load Success',
   props<{ components: Components[] }>()
@@ -125,5 +113,11 @@ export const loadComponentsSuccessAction = createAction(
 export const loadComponentsFailureAction = createAction(
   '[Repository Component API] Components Load Failure',
   props<{ componentError: string }>()
+);
+
+
+export const componentSelectedAction = createAction(
+  '[REPOSITORY COMPONENT] Select Component',
+  props<{ selected: boolean, component: Components | null }>()
 );
 

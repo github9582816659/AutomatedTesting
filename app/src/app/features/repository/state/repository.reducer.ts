@@ -18,6 +18,8 @@ export interface RepositoryState {
 
   // COMPONENTS
   components: Components[],
+  isComponentSelected: boolean,
+  selectedComponent: Components | null;
   componentError: string | null;
   componentStatus: 'pending' | 'loading' | 'error' | 'success';
 }
@@ -34,6 +36,8 @@ export const initialState: RepositoryState = {
 
   // COMPONENTS
   components: [],
+  isComponentSelected: false,
+  selectedComponent: null,
   componentError: "",
   componentStatus: 'pending'
 
@@ -57,16 +61,11 @@ export const repositoryReducer = createReducer(
     ...state,
     selectedPage: null,
     isPageSelected: false,
+    selectedComponent: null,
+    isComponentSelected: false,
+    componentStatus: 'pending',
     components: []
   })),
-  // // on(RepositoryAction.selectPageAction, (state, {page}) => ({
-  // //   ...state,
-  // //   selectedPage: page
-  // // })),
-  // on(RepositoryAction.clearSelectedPage, (state) => ({
-  //   ...state,
-  //   selectedPage: null
-  // })),
   on(RepositoryAction.isPageSelectedAction, (state, {isPageSelected}) => {
     return {
       ...state,
@@ -77,8 +76,6 @@ export const repositoryReducer = createReducer(
     ...state,
     isAddPageClicked: isAddPageClicked
   })),
-  //
-  // // LOAD
   on(RepositoryAction.loadPagesSuccess, (state, {pages}) => ({
     ...state,
     pages: pages,
@@ -90,8 +87,6 @@ export const repositoryReducer = createReducer(
     pageError: pageError,
     pageStatus: 'error',
   })),
-  //
-  // // SAVE
   on(RepositoryAction.savePageSuccessAction, (state, {page}) => ({
     ...state,
     pages: [...state.pages, page],
@@ -103,8 +98,6 @@ export const repositoryReducer = createReducer(
     pageError: pageError,
     pageStatus: 'error',
   })),
-  //
-  // // UPDATE
   on(RepositoryAction.updatePageSuccessAction, (state, {page}) => {
     let index = -1;
     if (page) {
@@ -129,8 +122,6 @@ export const repositoryReducer = createReducer(
     pageError: pageError,
     pageStatus: 'error',
   })),
-  //
-  // // DELETE
   on(RepositoryAction.deletePageSuccessAction, (state, {pageId}) => ({
     ...state,
     pages: state.pages.filter((page) => {
@@ -163,5 +154,10 @@ export const repositoryReducer = createReducer(
     ...state,
     componentError: componentError,
     componentStatus: 'error',
+  })),
+  on(RepositoryAction.componentSelectedAction, (state, {selected, component}) => ({
+    ...state,
+    isComponentSelected: selected,
+    selectedComponent: component,
   })),
 );

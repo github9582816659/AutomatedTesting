@@ -10,6 +10,8 @@ import {AppState} from "../../../../app.state";
 import {
   deletePageAction, savePageAction, updatePageAction
 } from "../../state/repository.actions";
+import {Components} from "../../model/component.model";
+import {selectIsComponentSelected} from "../../state/repository.selectors";
 
 @Component({
   selector: 'app-page',
@@ -35,6 +37,7 @@ export class PageComponent implements OnInit, OnDestroy {
   });
   selectedPage$: Observable<Page | null> | undefined;
   isPageSelected$: Observable<boolean> | undefined;
+  //isComponentSelected$: Observable<boolean> = this.store.select<Components[]>(fromRepository.selectIsComponentSelected);
   isAddPageClicked$: Observable<boolean> | undefined;
   addOnBlur = true;
   readonly separatorKeysCodes = [ENTER, COMMA] as const;

@@ -3,7 +3,8 @@ import {Components} from "../../model/component.model";
 import {Store} from "@ngrx/store";
 import {AppState} from "../../../../app.state";
 import {
-  loadAllComponentsAction
+  componentSelectedAction,
+  loadAllComponentsAction, pageSelectedAction
 } from "../../state/repository.actions";
 import {Page} from "../../model/page.model";
 import {Observable} from "rxjs";
@@ -40,4 +41,7 @@ export class ComponentListComponent implements OnInit {
 
   }
 
+  componentClickHandler(component: Components) {
+    this.store.dispatch(componentSelectedAction({selected: true, component: component}));
+  }
 }
