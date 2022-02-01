@@ -37,7 +37,7 @@ export class PageComponent implements OnInit, OnDestroy {
   });
   selectedPage$: Observable<Page | null> | undefined;
   isPageSelected$: Observable<boolean> | undefined;
-  //isComponentSelected$: Observable<boolean> = this.store.select<Components[]>(fromRepository.selectIsComponentSelected);
+  isComponentSelected$: Observable<boolean> = this.store.select(fromRepository.selectIsComponentSelected);
   isAddPageClicked$: Observable<boolean> | undefined;
   addOnBlur = true;
   readonly separatorKeysCodes = [ENTER, COMMA] as const;

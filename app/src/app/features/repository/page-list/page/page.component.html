@@ -1,24 +1,26 @@
-<div *ngIf="!hidePageForm">
+<div fxLayout="row" fxLayoutAlign="space-between center" fxLayoutGap="5px" *ngIf="isPageSelected">
 
-  <div fxLayout="row" fxLayoutAlign="space-between center" fxLayoutGap="5px" *ngIf="isPageSelected">
-
-    <div fxLayout="column" fxLayoutAlign="center center">
-      <h3>Page Name: {{pageForm?.get('pageName')?.value}}</h3>
-    </div>
-
-    <div fxLayoutGap="5px">
-      <button mat-flat-button
-              color="primary"
-              type="button"
-              (click)="editPageClickHandler()">Edit</button>
-      <button mat-flat-button
-              color="primary"
-              (click)="deletePageHandler()"
-              type="button" >Delete</button>
-    </div>
+  <div fxLayout="column" fxLayoutAlign="center center">
+    <h3>Page Name: {{pageForm?.get('pageName')?.value}}</h3>
   </div>
 
-  <form (ngSubmit)="pageSubmitHandler()" [formGroup]="pageForm" [ngClass]="{'margin-top-10' : isPageSelected, 'margin-top-47' : !isPageSelected}">
+  <div fxLayoutGap="5px">
+    <button mat-flat-button
+            color="primary"
+            type="button"
+            (click)="editPageClickHandler()">Edit
+    </button>
+    <button mat-flat-button
+            color="warn"
+            (click)="deletePageHandler()"
+            type="button">Delete
+    </button>
+  </div>
+</div>
+
+<div *ngIf="!hidePageForm && !(isComponentSelected$|async)">
+  <form (ngSubmit)="pageSubmitHandler()" [formGroup]="pageForm"
+        [ngClass]="{'margin-top-10' : isPageSelected, 'margin-top-47' : !isPageSelected}">
 
     <div fxLayout="column" fxFlex>
 
@@ -74,7 +76,8 @@
           </mat-option>
         </mat-select>
       </mat-form-field>
-      <mat-error *ngIf="!pageForm?.get('referenceType')?.valid && pageForm?.get('referenceType')?.touched" class="error-hint">
+      <mat-error *ngIf="!pageForm?.get('referenceType')?.valid && pageForm?.get('referenceType')?.touched"
+                 class="error-hint">
         <small class="mat-small">Please provide valid reference type</small>
       </mat-error>
 
@@ -83,14 +86,16 @@
         <mat-label>Reference Value</mat-label>
         <input matInput placeholder="Reference Value" formControlName="referenceValue">
       </mat-form-field>
-      <mat-error *ngIf="!pageForm?.get('referenceValue')?.valid && pageForm?.get('referenceValue')?.touched" class="error-hint">
+      <mat-error *ngIf="!pageForm?.get('referenceValue')?.valid && pageForm?.get('referenceValue')?.touched"
+                 class="error-hint">
         <small class="mat-small">Please provide valid page reference value</small>
       </mat-error>
 
 
       <!--   Submit   -->
       <div fxFlex fxLayoutAlign="end">
-        <button mat-flat-button [disabled]="!pageForm.valid" color="primary" type="submit">{{editMode ? "Update" : "Save"}}</button>
+        <button mat-flat-button [disabled]="!pageForm.valid" color="primary"
+                type="submit">{{editMode ? "Update" : "Save"}}</button>
       </div>
 
     </div>

@@ -83,7 +83,7 @@ public class PageServiceImpl implements PageService {
             }
 
             return RepositoryResponseDTO.builder()
-                    .pages(pagesList)
+                    .repository(pagesList)
                     .build();
         } catch (ResourceNotFoundException ex) {
             log.error("Repository not found ", ex);
