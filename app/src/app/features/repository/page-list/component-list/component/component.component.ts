@@ -90,7 +90,7 @@ export class ComponentComponent implements OnInit {
   }
 
   componentSubmitHandler() {
-
+    console.log(this.componentForm.value)
   }
 
   onValueTypeChange() {

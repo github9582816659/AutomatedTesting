@@ -167,6 +167,7 @@ public class ComponentServiceImpl implements ComponentService {
     private ComponentResponseDTO getComponentDto(Component component) {
         return ComponentResponseDTO.builder()
                 .componentId(String.valueOf(component.getComponentId()))
+                .componentMappingId(String.valueOf(component.getComponentMappingId()))
                 .projectId(String.valueOf(component.getProjectId()))
                 .releaseId(String.valueOf(component.getReleaseId()))
                 .pageId(String.valueOf(component.getPageId()))
@@ -185,6 +186,7 @@ public class ComponentServiceImpl implements ComponentService {
     private Component getComponentEntity(ComponentRequestDTO componentRequest) {
         return Component.builder()
                 .componentId(componentRequest.getComponentId() != null ? new ObjectId(componentRequest.getComponentId()) : null)
+                .componentMappingId(componentRequest.getComponentMappingId() != null ? new ObjectId(componentRequest.getComponentMappingId()) : new ObjectId())
                 .projectId(new ObjectId(componentRequest.getProjectId()))
                 .releaseId(new ObjectId(componentRequest.getReleaseId()))
                 .pageId(new ObjectId(componentRequest.getPageId()))
