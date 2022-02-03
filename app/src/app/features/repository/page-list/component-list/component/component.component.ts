@@ -6,6 +6,8 @@ import * as fromRepository from "../../../state/repository.selectors";
 import {Store} from "@ngrx/store";
 import {AppState} from "../../../../../app.state";
 import {
+  deleteComponentAction,
+  deletePageAction,
   saveComponentAction,
   updateComponentAction
 } from "../../../state/repository.actions";
@@ -90,7 +92,8 @@ export class ComponentComponent implements OnInit {
   }
 
   deleteComponentHandler() {
-
+    const componentId: string = this.componentForm.get('componentId')?.value;
+    this.store.dispatch(deleteComponentAction({componentId: componentId}));
   }
 
   componentSubmitHandler() {

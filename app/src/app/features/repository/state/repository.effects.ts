@@ -95,4 +95,14 @@ export class RepositoryEffects {
     )
   );
 
+  deleteComponent$ = createEffect(() => this.actions$.pipe(
+      ofType(RepositoryAction.deleteComponentAction),
+      mergeMap((action) => this.repositoryService.deleteComponent(action.componentId)
+        .pipe(
+          map((result) => RepositoryAction.deleteComponentSuccessAction({componentId: result.componentId})),
+          catchError((error) => of(RepositoryAction.deleteComponentFailureAction({componentError: error})))
+        ))
+    )
+  );
+
 }

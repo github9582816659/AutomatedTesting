@@ -168,11 +168,11 @@ export const deleteComponentAction = createAction(
 );
 
 export const deleteComponentSuccessAction = createAction(
-  '[REPOSITORY COMPONENT API] Delete v Success',
+  '[REPOSITORY COMPONENT API] Delete Component Success',
   props<{ componentId: string }>()
 );
 
 export const deleteComponentFailureAction = createAction(
-  '[REPOSITORY COMPONENT API] Delete v Failure',
+  '[REPOSITORY COMPONENT API] Delete Component Failure',
   props<{ componentError: string }>()
 );

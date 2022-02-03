@@ -222,8 +222,8 @@ export const repositoryReducer = createReducer(
     components: state.components.filter((component) => {
       return component.componentId !== componentId
     }),
-    pageError: null,
-    pageStatus: 'success',
+    componentError: null,
+    componentStatus: 'success',
   })),
   on(RepositoryAction.deleteComponentFailureAction, (state, {componentError}) => ({
     ...state,
