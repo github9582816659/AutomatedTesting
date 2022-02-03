@@ -22,3 +22,7 @@ export interface RefType {
   value: string;
   viewValue: string;
 }
+
+export interface ComponentDelete {
+  componentId: string
+}

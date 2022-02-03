@@ -35,6 +35,11 @@ export const selectComponentStatus = createSelector(
   (state: RepositoryState) => state.componentStatus
 );
 
+export const selectComponentError = createSelector(
+  selectRepository,
+  (state: RepositoryState) => state.componentError
+);
+
 export const selectIsComponentSelected = createSelector(
   selectRepository,
   (state: RepositoryState) => state.isComponentSelected

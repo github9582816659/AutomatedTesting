@@ -1,11 +1,7 @@
 import {Injectable} from '@angular/core';
 import {HttpClient} from "@angular/common/http";
-import {Page} from "../model/page.model";
-import {Components} from "../model/component.model";
-
-interface PageDelete {
-  pageId: string
-}
+import {Page, PageDelete} from "../model/page.model";
+import {ComponentDelete, Components} from "../model/component.model";
 
 @Injectable({
   providedIn: 'root'
@@ -50,5 +46,9 @@ export class RepositoryService {
 
   updateComponent(componentId: string, component: Components) {
     return this.http.put<Components>(`http://localhost:8081/api/components/${componentId}`, component);
+  }
+
+  deleteComponent(componentId: string) {
+    return this.http.delete<ComponentDelete>(`http://localhost:8081/api/components/${componentId}`);
   }
 }

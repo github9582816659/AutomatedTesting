@@ -22,6 +22,7 @@ import {MatSortModule} from "@angular/material/sort";
 import {MatPaginatorModule} from "@angular/material/paginator";
 import {MatExpansionModule} from "@angular/material/expansion";
 import {MatChipsModule} from "@angular/material/chips";
+import {MatSnackBarModule} from "@angular/material/snack-bar";
 
 
 @NgModule({
@@ -48,7 +49,8 @@ import {MatChipsModule} from "@angular/material/chips";
     MatSortModule,
     MatPaginatorModule,
     MatExpansionModule,
-    MatChipsModule
+    MatChipsModule,
+    MatSnackBarModule
   ],
   exports: [
     MatToolbarModule,
@@ -73,7 +75,8 @@ import {MatChipsModule} from "@angular/material/chips";
     MatSortModule,
     MatPaginatorModule,
     MatExpansionModule,
-    MatChipsModule
+    MatChipsModule,
+    MatSnackBarModule
   ]
 })
 export class MaterialModule {

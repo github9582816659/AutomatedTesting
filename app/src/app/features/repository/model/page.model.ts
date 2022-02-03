@@ -18,17 +18,21 @@ export interface RefType {
   viewValue: string;
 }
 
-export interface Repository {
-  pages: RepositoryPages[];
-}
+// export interface Repository {
+//   pages: RepositoryPages[];
+// }
+//
+// export interface RepositoryPages {
+//   pageId: string;
+//   pageName: string;
+//   components: RepositoryComponents[];
+// }
+//
+// export interface RepositoryComponents {
+//   componentId: string;
+//   componentName: string;
+// }
 
-export interface RepositoryPages {
-  pageId: string;
-  pageName: string;
-  components: RepositoryComponents[];
-}
-
-export interface RepositoryComponents {
-  componentId: string;
-  componentName: string;
+export interface PageDelete {
+  pageId: string
 }
