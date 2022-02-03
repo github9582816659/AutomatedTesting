@@ -59,7 +59,7 @@ public class PageApi {
     @PutMapping("/{id}")
     public ResponseEntity<PageResponseDTO> updatePage(@PathVariable String id, @RequestBody PageRequestDTO pageRequest) {
         log.info("PageApi updatePage with ID {} ", id);
-        return new ResponseEntity<>(pageService.updatePage(id, pageRequest), HttpStatus.CREATED);
+        return new ResponseEntity<>(pageService.updatePage(id, pageRequest), HttpStatus.OK);
     }
 
     @DeleteMapping("/{id}")

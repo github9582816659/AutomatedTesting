@@ -58,7 +58,7 @@ public class ComponentApi {
     @PutMapping("/{id}")
     public ResponseEntity<ComponentResponseDTO> updateComponent(@PathVariable String id, @RequestBody ComponentRequestDTO componentRequest) {
         log.info("ComponentApi updateComponent with ID {} ", id);
-        return new ResponseEntity<>(componentService.updateComponent(id, componentRequest), HttpStatus.CREATED);
+        return new ResponseEntity<>(componentService.updateComponent(id, componentRequest), HttpStatus.OK);
     }
 
     @DeleteMapping("/{id}")

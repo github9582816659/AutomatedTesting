@@ -55,7 +55,9 @@ export const repositoryReducer = createReducer(
     ...state,
     isPageSelected: selected,
     selectedPage: page,
-    components: []
+    components: [],
+    selectedComponent: null,
+    isComponentSelected: false,
   })),
   on(RepositoryAction.pageDeSelectedAction, (state) => ({
     ...state,

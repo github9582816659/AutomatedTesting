@@ -5,7 +5,6 @@ import {Components, RefType} from "../../../model/component.model";
 import * as fromRepository from "../../../state/repository.selectors";
 import {Store} from "@ngrx/store";
 import {AppState} from "../../../../../app.state";
-import {selectSelectedComponent} from "../../../state/repository.selectors";
 
 @Component({
   selector: 'app-component',
