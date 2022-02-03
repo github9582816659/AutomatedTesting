@@ -5,6 +5,10 @@ import {Components, RefType} from "../../../model/component.model";
 import * as fromRepository from "../../../state/repository.selectors";
 import {Store} from "@ngrx/store";
 import {AppState} from "../../../../../app.state";
+import {
+  saveComponentAction,
+  updateComponentAction
+} from "../../../state/repository.actions";
 
 @Component({
   selector: 'app-component',
@@ -71,17 +75,18 @@ export class ComponentComponent implements OnInit {
               componentValueProperty: {
                 componentValue: component.componentValueProperty?.componentValue || '',
               }
-            })
+            });
+
+            this.componentForm.disable();
           }
         })
       }
 
-    console.log(this.componentForm.value)
-
   }
 
   editComponentClickHandler() {
-
+    this.editMode = true;
+    this.componentForm.enable();
   }
 
   deleteComponentHandler() {
@@ -89,7 +94,37 @@ export class ComponentComponent implements OnInit {
   }
 
   componentSubmitHandler() {
-    console.log(this.componentForm.value)
+
+    const component: Components = {
+      componentId: this.componentForm.get('componentId')?.value ? this.componentForm.get('componentId')?.value : '',
+      componentMappingId: this.componentForm.get('componentMappingId')?.value ? this.componentForm.get('componentMappingId')?.value : '',
+      pageId: this.componentForm.get('pageId')?.value ? this.componentForm.get('pageId')?.value : '',
+      projectId: this.componentForm.get('projectId')?.value ? this.componentForm.get('projectId')?.value : "6166a01c77d7795b83b0b680",
+      releaseId: this.componentForm.get('releaseId')?.value ? this.componentForm.get('releaseId')?.value : "6166a01c77d7795b83b0b67e",
+      pageName: this.componentForm.get('pageName')?.value,
+      componentName: this.componentForm.get('componentName')?.value,
+      componentDescription: this.componentForm.get('componentDescription')?.value,
+      isIntractable: this.componentForm.get('isIntractable')?.value,
+      referenceType: this.componentForm.get('referenceType')?.value,
+      referenceValue: this.componentForm.get('referenceValue')?.value,
+      tags: this.componentForm.get('tags')?.value,
+      componentValueProperty: {
+        componentValue: this.componentForm.get('componentValueProperty.componentValue')?.value || '',
+      }
+
+    }
+
+    if (this.editMode) {
+      this.store.dispatch(updateComponentAction({componentId: component.componentId, component: component}));
+      this.editMode = false;
+      this.componentForm.disable();
+    } else {
+      this.store.dispatch(saveComponentAction({component: component}));
+      this.componentForm.reset();
+      this.hideComponentForm = true;
+    }
+
+
   }
 
   onValueTypeChange() {

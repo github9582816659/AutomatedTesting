@@ -121,3 +121,58 @@ export const componentSelectedAction = createAction(
   props<{ selected: boolean, component: Components | null }>()
 );
 
+// ################################################ SAVE COMPONENT ################################################
+// ###########################################################################################################
+
+export const saveComponentAction = createAction(
+  '[REPOSITORY COMPONENT] Save Component',
+  props<{ component: Components }>()
+);
+
+export const saveComponentSuccessAction = createAction(
+  '[REPOSITORY COMPONENT API] Save Component Success',
+  props<{ component: Components }>()
+);
+
+export const saveComponentFailureAction = createAction(
+  '[REPOSITORY COMPONENT API] Save Component Failure',
+  props<{ componentError: string }>()
+);
+
+
+// ################################################ UPDATE COMPONENT ################################################
+// #############################################################################################################
+
+export const updateComponentAction = createAction(
+  '[REPOSITORY COMPONENT] Update Component',
+  props<{ componentId: string, component: Components }>()
+);
+
+export const updateComponentSuccessAction = createAction(
+  '[REPOSITORY COMPONENT API] Update Component Success',
+  props<{ component: Components }>()
+);
+
+export const updateComponentFailureAction = createAction(
+  '[REPOSITORY COMPONENT API] Update Component Failure',
+  props<{ componentError: string }>()
+);
+
+
+// ################################################ DELETE COMPONENT ################################################
+// #############################################################################################################
+
+export const deleteComponentAction = createAction(
+  '[REPOSITORY COMPONENT] Delete Component',
+  props<{ componentId: string }>()
+);
+
+export const deleteComponentSuccessAction = createAction(
+  '[REPOSITORY COMPONENT API] Delete v Success',
+  props<{ componentId: string }>()
+);
+
+export const deleteComponentFailureAction = createAction(
+  '[REPOSITORY COMPONENT API] Delete v Failure',
+  props<{ componentError: string }>()
+);

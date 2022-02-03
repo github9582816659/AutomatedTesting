@@ -10,8 +10,6 @@ import {AppState} from "../../../../app.state";
 import {
   deletePageAction, savePageAction, updatePageAction
 } from "../../state/repository.actions";
-import {Components} from "../../model/component.model";
-import {selectIsComponentSelected} from "../../state/repository.selectors";
 
 @Component({
   selector: 'app-page',

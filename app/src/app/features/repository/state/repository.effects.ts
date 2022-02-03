@@ -49,7 +49,7 @@ export class RepositoryEffects {
         ))
     )
   );
-  //
+
   deletePage$ = createEffect(() => this.actions$.pipe(
       ofType(RepositoryAction.deletePageAction),
       mergeMap((action) => this.repositoryService.deletePage(action.pageId)
@@ -71,6 +71,26 @@ export class RepositoryEffects {
         .pipe(
           map((components:Components[]) => RepositoryAction.loadComponentsSuccessAction({components: components})),
           catchError((error) => of(RepositoryAction.loadComponentsFailureAction({componentError: error})))
+        ))
+    )
+  );
+
+  saveComponent$ = createEffect(() => this.actions$.pipe(
+      ofType(RepositoryAction.saveComponentAction),
+      mergeMap((action) => this.repositoryService.saveComponent(action.component)
+        .pipe(
+          map((component:Components) => RepositoryAction.saveComponentSuccessAction({component: component})),
+          catchError((error) => of(RepositoryAction.saveComponentFailureAction({componentError: error})))
+        ))
+    )
+  );
+
+  updateComponent$ = createEffect(() => this.actions$.pipe(
+      ofType(RepositoryAction.updateComponentAction),
+      mergeMap((action) => this.repositoryService.updateComponent(action.componentId, action.component)
+        .pipe(
+          map((component:Components) => RepositoryAction.updateComponentSuccessAction({component: component})),
+          catchError((error) => of(RepositoryAction.updateComponentFailureAction({componentError: error})))
         ))
     )
   );

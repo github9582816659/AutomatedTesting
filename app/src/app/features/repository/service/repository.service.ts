@@ -2,7 +2,6 @@ import {Injectable} from '@angular/core';
 import {HttpClient} from "@angular/common/http";
 import {Page} from "../model/page.model";
 import {Components} from "../model/component.model";
-import {Observable} from "rxjs";
 
 interface PageDelete {
   pageId: string
@@ -43,5 +42,13 @@ export class RepositoryService {
 
   loadAllComponents(pageId: string) {
     return this.http.get<Components[]>(`http://localhost:8081/api/components/pages/${pageId}`);
+  }
+
+  saveComponent(component: Components) {
+    return this.http.post<Components>('http://localhost:8081/api/components', component);
+  }
+
+  updateComponent(componentId: string, component: Components) {
+    return this.http.put<Components>(`http://localhost:8081/api/components/${componentId}`, component);
   }
 }

@@ -2,10 +2,6 @@ import {Page} from "../model/page.model";
 import {createReducer, on} from "@ngrx/store";
 import * as RepositoryAction from "./repository.actions";
 import {Components} from "../model/component.model";
-import {
-  //pageSelected, pageUnSelected
-} from "./repository.actions";
-
 
 export interface RepositoryState {
   // PAGES
@@ -78,6 +74,9 @@ export const repositoryReducer = createReducer(
     ...state,
     isAddPageClicked: isAddPageClicked
   })),
+
+  // ################################################ LOAD #################################################
+
   on(RepositoryAction.loadPagesSuccess, (state, {pages}) => ({
     ...state,
     pages: pages,
@@ -89,6 +88,9 @@ export const repositoryReducer = createReducer(
     pageError: pageError,
     pageStatus: 'error',
   })),
+
+  // ################################################ SAVE #################################################
+
   on(RepositoryAction.savePageSuccessAction, (state, {page}) => ({
     ...state,
     pages: [...state.pages, page],
@@ -100,6 +102,9 @@ export const repositoryReducer = createReducer(
     pageError: pageError,
     pageStatus: 'error',
   })),
+
+  // ################################################## UPDATE ###############################################
+
   on(RepositoryAction.updatePageSuccessAction, (state, {page}) => {
     let index = -1;
     if (page) {
@@ -124,6 +129,9 @@ export const repositoryReducer = createReducer(
     pageError: pageError,
     pageStatus: 'error',
   })),
+
+  // ################################################## DELETE ###############################################
+
   on(RepositoryAction.deletePageSuccessAction, (state, {pageId}) => ({
     ...state,
     pages: state.pages.filter((page) => {
@@ -142,6 +150,14 @@ export const repositoryReducer = createReducer(
   // ########################################## COMPONENTS ###########################################
   // #################################################################################################
 
+  on(RepositoryAction.componentSelectedAction, (state, {selected, component}) => ({
+    ...state,
+    isComponentSelected: selected,
+    selectedComponent: component,
+  })),
+
+  // ################################################ LOAD #################################################
+
   on(RepositoryAction.loadAllComponentsAction, (state) => ({
     ...state,
     componentStatus: 'loading',
@@ -157,9 +173,61 @@ export const repositoryReducer = createReducer(
     componentError: componentError,
     componentStatus: 'error',
   })),
-  on(RepositoryAction.componentSelectedAction, (state, {selected, component}) => ({
+
+  // ################################################ SAVE #################################################
+
+  on(RepositoryAction.saveComponentSuccessAction, (state, {component}) => ({
     ...state,
-    isComponentSelected: selected,
-    selectedComponent: component,
+    components: [...state.components, component],
+    componentError: null,
+    componentStatus: 'success',
+  })),
+  on(RepositoryAction.saveComponentFailureAction, (state, {componentError}) => ({
+    ...state,
+    componentError: componentError,
+    componentStatus: 'error',
+  })),
+
+  // ################################################## UPDATE ###############################################
+
+  on(RepositoryAction.updateComponentSuccessAction, (state, {component}) => {
+    let index = -1;
+    if (component) {
+      index = state.components.findIndex(c => c.componentId === component.componentId);
+    }
+
+    const updatedComponent = {
+      ...state.components[index],
+      ...component
+    };
+
+    const updatedComponents = [...state.components];
+    updatedComponents[index] = updatedComponent;
+
+    return {
+      ...state,
+      components: updatedComponents
+    };
+  }),
+  on(RepositoryAction.updateComponentFailureAction, (state, {componentError}) => ({
+    ...state,
+    componentError: componentError,
+    componentStatus: 'error',
+  })),
+
+  // ################################################ DELETE #################################################
+
+  on(RepositoryAction.deleteComponentSuccessAction, (state, {componentId}) => ({
+    ...state,
+    components: state.components.filter((component) => {
+      return component.componentId !== componentId
+    }),
+    pageError: null,
+    pageStatus: 'success',
+  })),
+  on(RepositoryAction.deleteComponentFailureAction, (state, {componentError}) => ({
+    ...state,
+    componentError: componentError,
+    componentStatus: 'error',
   })),
 );
