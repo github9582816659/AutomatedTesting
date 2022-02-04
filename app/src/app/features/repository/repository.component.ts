@@ -22,6 +22,7 @@ export class RepositoryComponent implements OnInit {
     this.componentError$.subscribe((error: any) => {
       if (error) {
         const snackBar = this._snackBar.openFromComponent(SnackbarComponent, {
+          duration: 3 * 1000,
           data: {
             message: error.error.status === 'NOT_FOUND' ? 'No Component Present' : '',
             preClose: () => {
