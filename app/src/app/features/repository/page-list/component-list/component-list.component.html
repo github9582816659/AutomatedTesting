@@ -1,3 +1,7 @@
+<div fxLayout="row" fxLayoutAlign="flex-end" style="margin-top: 10px">
+  <button color="primary" mat-flat-button (click)="addComponentHandler()">Add</button>
+</div>
+
 <mat-selection-list [multiple]="false">
   <mat-list-option *ngFor="let component of allComponents$|async; let i= index  " [value]="component">
     <button mat-flat-button color="primary" (click)="componentClickHandler(component)">

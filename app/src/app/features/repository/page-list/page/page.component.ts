@@ -167,10 +167,12 @@ export class PageComponent implements OnInit, OnDestroy {
     }
 
     if (this.editMode) {
+      console.log('PAGE_EDIT')
       this.store.dispatch(updatePageAction({pageId: page.pageId, page: page}));
       this.editMode = false;
       this.pageForm.disable();
     } else {
+      console.log('PAGE_SAVE')
       this.store.dispatch(savePageAction({page: page}));
       this.pageForm.reset();
       this.hidePageForm = true;

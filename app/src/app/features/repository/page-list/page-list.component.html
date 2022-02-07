@@ -2,7 +2,10 @@
 
   <div fxLayout="column">
 
-    <div fxLayoutAlign="end start">
+    <div fxLayout="row" fxLayoutAlign="space-between center">
+      <div>
+        <h3 style="display: inline">Pages</h3>
+      </div>
       <button mat-flat-button color="primary" (click)="addPageClickHandler()">Add</button>
     </div>
 
@@ -17,43 +20,43 @@
 
   <div>
     <div style="margin-bottom: 20px">
-      <table mat-table
-             [dataSource]="dataSource"
-             multiTemplateDataRows>
-        <ng-container matColumnDef="{{column}}" *ngFor="let column of columnsToDisplay; let i = index">
-          <th mat-header-cell *matHeaderCellDef> {{column}} </th>
-          <td mat-cell *matCellDef="let element" class="table-border">
-            <div fxLayout="row" fxLayoutAlign="space-between center">
-              <span>{{element[column]}}</span>
-              <mat-icon (click)="tableExpandHandler(element, expandedElement, column, i)">
-                {{expandedElement === element ? 'expand_more' : 'expand_less'}}
-              </mat-icon>
-            </div>
-          </td>
-        </ng-container>
+<!--      <table mat-table-->
+<!--             [dataSource]="dataSource"-->
+<!--             multiTemplateDataRows>-->
+<!--        <ng-container matColumnDef="{{column}}" *ngFor="let column of columnsToDisplay; let i = index">-->
+<!--          <th mat-header-cell *matHeaderCellDef> {{column}} </th>-->
+<!--          <td mat-cell *matCellDef="let element" class="table-border">-->
+<!--            <div fxLayout="row" fxLayoutAlign="space-between center">-->
+<!--              <span>{{element[column]}}</span>-->
+<!--              <mat-icon (click)="tableExpandHandler(element, expandedElement)">-->
+<!--                {{expandedElement === element ? 'expand_more' : 'expand_less'}}-->
+<!--              </mat-icon>-->
+<!--            </div>-->
+<!--          </td>-->
+<!--        </ng-container>-->
 
-        <!-- Expanded Content Column - The detail row is made up of this one column that spans across all columns -->
-        <ng-container matColumnDef="expandedDetail" >
-          <td class="table-border" mat-cell *matCellDef="let element" [attr.colspan]="columnsToDisplay.length">
-            <div class="example-element-detail"
-                 [@detailExpand]="element == expandedElement ? 'expanded' : 'collapsed'">
-              <div style="width: 100%" *ngIf="expandedElement == element">
-                <app-component-list *ngIf="expandedElement == element" [element] = element></app-component-list>
-              </div>
-            </div>
-          </td>
-        </ng-container>
+<!--        &lt;!&ndash; Expanded Content Column - The detail row is made up of this one column that spans across all columns &ndash;&gt;-->
+<!--        <ng-container matColumnDef="expandedDetail" >-->
+<!--          <td class="table-border" mat-cell *matCellDef="let element" [attr.colspan]="columnsToDisplay.length">-->
+<!--            <div class="example-element-detail"-->
+<!--                 [@detailExpand]="element == expandedElement ? 'expanded' : 'collapsed'">-->
+<!--              <div style="width: 100%" *ngIf="expandedElement == element">-->
+<!--                <app-component-list *ngIf="expandedElement == element" [element] = element></app-component-list>-->
+<!--              </div>-->
+<!--            </div>-->
+<!--          </td>-->
+<!--        </ng-container>-->
 
-        <tr mat-row *matRowDef="let element; columns: columnsToDisplay;"
-            class="example-element-row"
-            [class.example-expanded-row]="expandedElement === element"
-        >
-        </tr>
-        <tr mat-row *matRowDef="let row; columns: ['expandedDetail']" class="example-detail-row"></tr>
-      </table>
+<!--        <tr mat-row *matRowDef="let element; columns: columnsToDisplay;"-->
+<!--            class="example-element-row"-->
+<!--            [class.example-expanded-row]="expandedElement === element"-->
+<!--        >-->
+<!--        </tr>-->
+<!--        <tr mat-row *matRowDef="let row; columns: ['expandedDetail']" class="example-detail-row"></tr>-->
+<!--      </table>-->
 
-      <mat-paginator [pageSize]="10" [pageSizeOptions]="[5,10]">
-      </mat-paginator>
+<!--      <mat-paginator [pageSize]="10" [pageSizeOptions]="[5,10]">-->
+<!--      </mat-paginator>-->
     </div>
 
   </div>

@@ -24,8 +24,8 @@ export class RepositoryEffects {
       ofType(RepositoryAction.loadAllPagesAction),
       mergeMap(() => this.repositoryService.loadAllPages()
         .pipe(
-          map((pages:Page[]) => RepositoryAction.loadPagesSuccess({pages: pages})),
-          catchError((error) => of(RepositoryAction.loadPagesFailure({pageError: error})))
+          map((pages:Page[]) => RepositoryAction.loadPagesSuccessAction({pages: pages})),
+          catchError((error) => of(RepositoryAction.loadPagesFailureAction({pageError: error})))
         ))
     )
   );

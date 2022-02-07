@@ -15,6 +15,7 @@ export interface RepositoryState {
   // COMPONENTS
   components: Components[],
   isComponentSelected: boolean,
+  isAddComponentClicked: boolean,
   selectedComponent: Components | null;
   componentError: string | null;
   componentStatus: 'pending' | 'loading' | 'error' | 'success';
@@ -33,6 +34,7 @@ export const initialState: RepositoryState = {
   // COMPONENTS
   components: [],
   isComponentSelected: false,
+  isAddComponentClicked: false,
   selectedComponent: null,
   componentError: "",
   componentStatus: 'pending'
@@ -50,40 +52,52 @@ export const repositoryReducer = createReducer(
   on(RepositoryAction.pageSelectedAction, (state, {selected, page}) => ({
     ...state,
     isPageSelected: selected,
+    isAddPageClicked: false,
     selectedPage: page,
     components: [],
     selectedComponent: null,
     isComponentSelected: false,
+    isAddComponentClicked: false
   })),
   on(RepositoryAction.pageDeSelectedAction, (state) => ({
     ...state,
     selectedPage: null,
     isPageSelected: false,
+    isAddPageClicked: false,
+    components: [],
     selectedComponent: null,
     isComponentSelected: false,
-    componentStatus: 'pending',
-    components: []
+    isAddComponentClicked: false,
+    componentStatus: 'pending'
   })),
   on(RepositoryAction.isPageSelectedAction, (state, {isPageSelected}) => {
     return {
       ...state,
-      isPageSelected: isPageSelected
+      isPageSelected: isPageSelected,
+      isAddPageClicked: false,
+      selectedComponent: null,
+      isComponentSelected: false,
+      isAddComponentClicked: false
     }
   }),
   on(RepositoryAction.isAddPageClickedAction, (state, {isAddPageClicked}) => ({
     ...state,
-    isAddPageClicked: isAddPageClicked
+    isAddPageClicked: isAddPageClicked,
+    isPageSelected: false,
+    selectedComponent: null,
+    isComponentSelected: false,
+    isAddComponentClicked: false
   })),
 
   // ################################################ LOAD #################################################
 
-  on(RepositoryAction.loadPagesSuccess, (state, {pages}) => ({
+  on(RepositoryAction.loadPagesSuccessAction, (state, {pages}) => ({
     ...state,
     pages: pages,
     pageError: null,
     pageStatus: 'success',
   })),
-  on(RepositoryAction.loadPagesFailure, (state, {pageError}) => ({
+  on(RepositoryAction.loadPagesFailureAction, (state, {pageError}) => ({
     ...state,
     pageError: pageError,
     pageStatus: 'error',
@@ -106,6 +120,7 @@ export const repositoryReducer = createReducer(
   // ################################################## UPDATE ###############################################
 
   on(RepositoryAction.updatePageSuccessAction, (state, {page}) => {
+    console.log('updatePageSuccessAction')
     let index = -1;
     if (page) {
       index = state.pages.findIndex(p => p.pageId === page.pageId);
@@ -154,6 +169,24 @@ export const repositoryReducer = createReducer(
     ...state,
     isComponentSelected: selected,
     selectedComponent: component,
+    isAddComponentClicked: false,
+    isAddPageClicked: false
+  })),
+
+  on(RepositoryAction.isAddComponentClickedAction, (state, {isAddComponentClicked}) => ({
+    ...state,
+    isAddComponentClicked: isAddComponentClicked,
+    isPageSelected: false,
+    selectedComponent: null,
+    isComponentSelected: false,
+    isAddPageClicked: false
+  })),
+
+  on(RepositoryAction.isComponentSelectedAction, (state, {isComponentSelected}) => ({
+    ...state,
+    isComponentSelected: isComponentSelected,
+    isAddComponentClicked: false,
+    isAddPageClicked: false
   })),
 
   // ################################################ LOAD #################################################

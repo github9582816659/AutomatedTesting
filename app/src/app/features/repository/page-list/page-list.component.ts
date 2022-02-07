@@ -12,7 +12,6 @@ import {
 } from "../state/repository.actions";
 import {AppState} from "../../../app.state";
 import * as fromRepository from "../state/repository.selectors";
-import {Observable} from "rxjs";
 
 @Component({
   selector: 'app-page-list',
@@ -34,8 +33,6 @@ export class PageListComponent implements OnInit,AfterViewInit {
   dataSource = new MatTableDataSource<Page>([]);
   columnsToDisplay = ['pageName'];
   expandedElement!: Page | null;
-  isPageSelected$!: Observable<boolean>;
-  isPageSelected!: boolean;
 
   constructor(private store: Store<AppState>) { }
 
@@ -57,7 +54,7 @@ export class PageListComponent implements OnInit,AfterViewInit {
     this.dataSource.filter = filterValue.trim().toLowerCase();
   }
 
-  tableExpandHandler(element: any, expandedElement: any, column: string, i: number) {
+  tableExpandHandler(element: any, expandedElement: any) {
     if (expandedElement?.pageId === element?.pageId) {
       this.store.dispatch(isPageSelectedAction({isPageSelected: false}));
       this.store.dispatch(isAddPageClickedAction({isAddPageClicked: false}));

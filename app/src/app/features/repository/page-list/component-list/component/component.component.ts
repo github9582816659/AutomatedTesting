@@ -7,7 +7,6 @@ import {Store} from "@ngrx/store";
 import {AppState} from "../../../../../app.state";
 import {
   deleteComponentAction,
-  deletePageAction,
   saveComponentAction,
   updateComponentAction
 } from "../../../state/repository.actions";
@@ -42,11 +41,16 @@ export class ComponentComponent implements OnInit {
   isComponentSelected$: Observable<boolean> = this.store.select(fromRepository.selectIsComponentSelected);
   selectedComponent$: Observable<Components | null> | undefined;
   editMode: boolean = false;
+  addMode: boolean = false;
+  isComponentSelected: boolean = false;
+  tags: string[] = [];
+
   refTypes: RefType[] = [
     {value: 'JSPATH', viewValue: 'JS-Path'},
     {value: 'XPATH', viewValue: 'X-Path'},
     {value: 'CODE SNIPPET', viewValue: 'CODE-SNIPPET'},
   ];
+
   valueTypes: RefType[] = [
     {value: 'NONE', viewValue: 'None'},
     {value: 'FIXED', viewValue: 'Fixed'},
@@ -56,33 +60,61 @@ export class ComponentComponent implements OnInit {
   constructor(private fb: FormBuilder, private store: Store<AppState>) { }
 
   ngOnInit(): void {
-    this.selectedComponent$ = this.store.select<Components | null>(fromRepository.selectSelectedComponent)
-      if (this.selectedComponent$) {
-        this.selectedComponent$.subscribe((component:Components|null) => {
-          if (component) {
-            this.componentForm.setValue({
-              componentId: component.componentId || '',
-              componentMappingId: component.componentMappingId || '',
-              projectId: component.projectId || '',
-              releaseId: component.releaseId || '',
-              pageId: component.pageId || '',
-              pageName: component.pageName || '',
-              componentName: component.componentName || '',
-              componentDescription: component.componentDescription || '',
-              componentValueType: component.componentValueType || '',
-              isIntractable: component.isIntractable || false,
-              referenceType: component.referenceType || '',
-              referenceValue: component.referenceValue || '',
-              tags: component.tags || [],
-              componentValueProperty: {
-                componentValue: component.componentValueProperty?.componentValue || '',
-              }
-            });
 
-            this.componentForm.disable();
-          }
-        })
+    this.store.select<boolean>(fromRepository.selectIsAddComponentClicked).subscribe((isAddComponentClicked: boolean) => {
+      if (isAddComponentClicked) {
+        this.addMode = isAddComponentClicked;
+        this.isComponentSelected = false;
+        this.componentForm.reset();
+        this.componentForm.enable();
+        this.tags = [];
+        this.hideComponentForm = false;
       }
+    });
+
+    this.isComponentSelected$ = this.store.select<boolean>(fromRepository.selectIsComponentSelected);
+    if ( this.isComponentSelected$) {
+      this.isComponentSelected$.subscribe((isComponentSelected: boolean) => {
+        if (isComponentSelected) {
+          // Component OPEN
+          this.isComponentSelected = isComponentSelected;
+
+          this.selectedComponent$ = this.store.select<Components | null>(fromRepository.selectSelectedComponent)
+          if (this.selectedComponent$) {
+            this.selectedComponent$.subscribe((component:Components|null) => {
+              if (component) {
+                this.componentForm.setValue({
+                  componentId: component.componentId || '',
+                  componentMappingId: component.componentMappingId || '',
+                  projectId: component.projectId || '',
+                  releaseId: component.releaseId || '',
+                  pageId: component.pageId || '',
+                  pageName: component.pageName || '',
+                  componentName: component.componentName || '',
+                  componentDescription: component.componentDescription || '',
+                  componentValueType: component.componentValueType || '',
+                  isIntractable: component.isIntractable || false,
+                  referenceType: component.referenceType || '',
+                  referenceValue: component.referenceValue || '',
+                  tags: component.tags || [],
+                  componentValueProperty: {
+                    componentValue: component.componentValueProperty?.componentValue || '',
+                  }
+                });
+
+                this.componentForm.disable();
+              }
+            })
+          }
+        } else {
+          // PAGE CLOSE
+          this.isComponentSelected = false;
+          this.hideComponentForm = true;
+          this.componentForm.reset();
+        }
+      })
+    }
+
 
   }
 

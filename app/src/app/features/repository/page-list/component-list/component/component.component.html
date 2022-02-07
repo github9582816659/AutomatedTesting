@@ -1,4 +1,4 @@
-<div *ngIf="!hideComponentForm && (isComponentSelected$|async)">
+<div *ngIf="isComponentSelected">
 
   <mat-divider style="margin-top: 20px"></mat-divider>
 
@@ -22,7 +22,10 @@
       </button>
     </div>
   </div>
+</div>
 
+
+<div *ngIf="!hideComponentForm">
   <form (ngSubmit)="componentSubmitHandler()" [formGroup]="componentForm"
         [ngClass]="{'margin-top-10' : (isComponentSelected$|async), 'margin-top-47' : !(isComponentSelected$|async)}">
 
@@ -107,5 +110,7 @@
     </div>
 
   </form>
-
 </div>
+
+
+
