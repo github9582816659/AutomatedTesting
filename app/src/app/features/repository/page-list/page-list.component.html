@@ -20,6 +20,16 @@
 
   <div>
     <div style="margin-bottom: 20px">
+
+      <mat-selection-list [multiple]="false">
+        <mat-list-option *ngFor="let page of pages" [value]="page">
+          <h3 style="">{{page.pageName}}</h3>
+          <mat-divider></mat-divider>
+        </mat-list-option>
+
+      </mat-selection-list>
+
+
 <!--      <table mat-table-->
 <!--             [dataSource]="dataSource"-->
 <!--             multiTemplateDataRows>-->

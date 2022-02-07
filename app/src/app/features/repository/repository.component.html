@@ -1,16 +1,22 @@
 <div fxLayout="row" fxLayoutGap="15px">
 
   <div fxFlex="35%">
+
     <app-page-list></app-page-list>
+
   </div>
 
   <mat-divider [vertical]="true" style="height:100vh"></mat-divider>
 
-  <div fxFlex="65%" fxLayout="column" fxLayoutAlign="center center">
+  <div fxFlex="65%" fxLayout="column" [fxLayoutAlign]="!(isAddPageClicked$|async) ? 'center center' : ''">
 
-    <h3>Get Started!</h3>
-    <p>Start by creating new page and then components.</p>
-    <button mat-flat-button color="primary">Add a new page</button>
+    <div fxLayout="column" fxLayoutAlign="center center" *ngIf="!(isAddPageClicked$|async)">
+      <h3>Get Started!</h3>
+      <p>Start by creating new page and then components.</p>
+      <button mat-flat-button color="primary">Add a new page</button>
+    </div>
+
+    <app-page></app-page>
 
   </div>
 

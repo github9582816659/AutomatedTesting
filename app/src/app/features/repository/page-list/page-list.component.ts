@@ -30,6 +30,7 @@ export class PageListComponent implements OnInit,AfterViewInit {
   @ViewChild(MatSort) sort!: MatSort;
   @ViewChild(MatPaginator) paginator!: MatPaginator;
 
+  pages:Page[] = [];
   dataSource = new MatTableDataSource<Page>([]);
   columnsToDisplay = ['pageName'];
   expandedElement!: Page | null;
@@ -40,7 +41,8 @@ export class PageListComponent implements OnInit,AfterViewInit {
      this.store.dispatch(loadAllPagesAction());
 
     this.store.select<Page[]>(fromRepository.selectAllPages).subscribe((pages:Page[]) => {
-      this.dataSource.data = pages;
+      //this.dataSource.data = pages;
+      this.pages = pages;
     });
   }
 
@@ -68,7 +70,7 @@ export class PageListComponent implements OnInit,AfterViewInit {
   }
 
   addPageClickHandler() {
-   this.store.dispatch(isPageSelectedAction({isPageSelected: false}));
+   //this.store.dispatch(isPageSelectedAction({isPageSelected: false}));
    this.store.dispatch(isAddPageClickedAction({isAddPageClicked: true}));
   }
 }

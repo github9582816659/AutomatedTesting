@@ -14,11 +14,13 @@ import {SnackbarComponent} from "../shared/snackbar/snackbar.component";
 export class RepositoryComponent implements OnInit {
 
   componentError$: Observable<string | null> = this.store.select(fromRepository.selectComponentError);
+  isAddPageClicked$: Observable<boolean> = this.store.select(fromRepository.selectIsAddPageClicked);
 
   constructor(private store: Store<AppState>, private _snackBar: MatSnackBar) {
   }
 
   ngOnInit(): void {
+
     this.componentError$.subscribe((error: any) => {
       if (error) {
         const snackBar = this._snackBar.openFromComponent(SnackbarComponent, {
@@ -31,7 +33,9 @@ export class RepositoryComponent implements OnInit {
           }
         });
       }
-    })
+    });
+
+
   }
 
 }
