@@ -1,107 +1,155 @@
-<div fxLayout="row" fxLayoutAlign="space-between center" fxLayoutGap="5px" *ngIf="isPageSelected">
+<div fxLayout="column" fxLayoutGap="20px">
 
-  <div fxLayout="column" fxLayoutAlign="center center">
-    <h3>Page Name: {{pageForm?.get('pageName')?.value}}</h3>
-  </div>
+  <div fxLayout="column"
+       class="margin-top-10"
+       fxLayoutGap="20px"
+       *ngIf="(isPageSelected$|async)">
 
-  <div fxLayoutGap="5px">
-    <button mat-flat-button
-            color="primary"
-            type="button"
-            (click)="editPageClickHandler()">Edit
-    </button>
-    <button mat-flat-button
-            color="warn"
-            (click)="deletePageHandler()"
-            type="button">Delete
-    </button>
-  </div>
-</div>
+    <div fxLayout="row" fxLayoutAlign="space-between center">
 
-<div *ngIf="!hidePageForm && !(isComponentSelected$|async)">
-  <form (ngSubmit)="pageSubmitHandler()" [formGroup]="pageForm"
-        [ngClass]="{'margin-top-10' : isPageSelected, 'margin-top-47' : !isPageSelected}">
-
-    <div fxLayout="column" fxFlex>
-
-      <!--   Page Name   -->
-      <mat-form-field>
-        <mat-label>Page Name</mat-label>
-        <input matInput placeholder="Page Name" formControlName="pageName" name="pageName">
-      </mat-form-field>
-      <mat-error *ngIf="!pageForm?.get('pageName')?.valid && pageForm?.get('pageName')?.touched" class="error-hint">
-        <small class="mat-small">Page Name is required</small>
-      </mat-error>
-
-      <!--   Page Description   -->
-      <mat-form-field>
-        <mat-label>Page Description</mat-label>
-        <input matInput placeholder="Page Description" formControlName="pageDescription" name="pageDescription">
-      </mat-form-field>
-
-
-      <!--   Tags   -->
-      <div fxFlex="nogrow">
-        <mat-form-field fxFill>
-          <mat-label>Tags</mat-label>
-          <mat-chip-list #chipList formControlName="tags">
-            <mat-chip *ngFor="let tag of tags"
-                      (removed)="removeTag(tag)">
-              {{tag}}
-              <button matChipRemove>
-                <mat-icon>cancel</mat-icon>
-              </button>
-            </mat-chip>
-            <input matInput
-                   [matChipInputFor]="chipList"
-                   [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
-                   [matChipInputAddOnBlur]="addOnBlur"
-                   (matChipInputTokenEnd)="addTag($event)">
-          </mat-chip-list>
-        </mat-form-field>
+      <div>
+        <h3 style="display: inline">Page Name: {{pageForm?.get('pageName')?.value}}</h3><br>
+        <p style="display: inline; color: lightgray">Page
+          Type: {{pageForm?.get('isFrame')?.value === true ? 'Frame' : 'Page'}}</p>
       </div>
-
-      <!--   Is Frame   -->
-      <mat-checkbox class="checkbox-margin"
-                    formControlName="isFrame"
-      >Frame
-      </mat-checkbox>
-
-      <!--   Reference Type   -->
-      <mat-form-field *ngIf="pageForm.value['isFrame']">
-        <mat-label>Reference Type</mat-label>
-        <mat-select formControlName="referenceType">
-          <mat-option *ngFor="let refType of refTypes" [value]="refType.value">
-            {{refType.viewValue}}
-          </mat-option>
-        </mat-select>
-      </mat-form-field>
-      <mat-error *ngIf="!pageForm?.get('referenceType')?.valid && pageForm?.get('referenceType')?.touched"
-                 class="error-hint">
-        <small class="mat-small">Please provide valid reference type</small>
-      </mat-error>
-
-      <!--   Reference Value   -->
-      <mat-form-field *ngIf="pageForm.value['isFrame']">
-        <mat-label>Reference Value</mat-label>
-        <input matInput placeholder="Reference Value" formControlName="referenceValue">
-      </mat-form-field>
-      <mat-error *ngIf="!pageForm?.get('referenceValue')?.valid && pageForm?.get('referenceValue')?.touched"
-                 class="error-hint">
-        <small class="mat-small">Please provide valid page reference value</small>
-      </mat-error>
-
-
-      <!--   Submit   -->
-      <div fxFlex fxLayoutAlign="end">
-        <button mat-flat-button [disabled]="!pageForm.valid" color="primary"
-                type="submit">{{editMode ? "Update" : "Save"}}</button>
+      <div fxLayoutGap="5px">
+        <button mat-flat-button
+                color="primary"
+                type="button"
+                (click)="editPageClickHandler()">Edit
+        </button>
+        <button mat-flat-button
+                color="warn"
+                (click)="deletePageHandler()"
+                type="button">Delete
+        </button>
       </div>
-
     </div>
-  </form>
+
+    <mat-divider></mat-divider>
+
+  </div>
+
+  <div fxLayout="row"
+       fxLayoutAlign="space-between center"
+       *ngIf="addMode">
+    <div fxLayout="column" fxLayoutAlign="center center">
+      <h3>Create a new page</h3>
+    </div>
+  </div>
+
+  <div *ngIf="!hidePageForm">
+    <form (ngSubmit)="pageSubmitHandler()" [formGroup]="pageForm"
+          [ngClass]="{'margin-top-10' : (isPageSelected$|async)}">
+
+      <div fxLayout="column" fxFlex>
+
+        <!--   Page Name   -->
+        <mat-form-field>
+          <mat-label>Page Name</mat-label>
+          <input matInput placeholder="Page Name" formControlName="pageName" name="pageName">
+        </mat-form-field>
+        <mat-error *ngIf="!pageForm?.get('pageName')?.valid && pageForm?.get('pageName')?.touched" class="error-hint">
+          <small class="mat-small">Page Name is required</small>
+        </mat-error>
+
+        <!--   Page Description   -->
+        <mat-form-field>
+          <mat-label>Page Description</mat-label>
+          <input matInput placeholder="Page Description" formControlName="pageDescription" name="pageDescription">
+        </mat-form-field>
+
+
+        <!--   Tags   -->
+        <div fxFlex="nogrow">
+          <mat-form-field fxFill>
+            <mat-label>Tags</mat-label>
+            <mat-chip-list #chipList formControlName="tags">
+              <mat-chip *ngFor="let tag of tags"
+                        (removed)="removeTag(tag)">
+                {{tag}}
+                <button matChipRemove>
+                  <mat-icon>cancel</mat-icon>
+                </button>
+              </mat-chip>
+              <input matInput
+                     [matChipInputFor]="chipList"
+                     [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
+                     [matChipInputAddOnBlur]="addOnBlur"
+                     (matChipInputTokenEnd)="addTag($event)">
+            </mat-chip-list>
+          </mat-form-field>
+        </div>
+
+        <!--   Is Frame   -->
+        <mat-checkbox class="checkbox-margin"
+                      formControlName="isFrame"
+        >Frame
+        </mat-checkbox>
+
+        <!--   Reference Type   -->
+        <mat-form-field *ngIf="pageForm.value['isFrame']">
+          <mat-label>Reference Type</mat-label>
+          <mat-select formControlName="referenceType">
+            <mat-option *ngFor="let refType of refTypes" [value]="refType.value">
+              {{refType.viewValue}}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+        <mat-error *ngIf="!pageForm?.get('referenceType')?.valid && pageForm?.get('referenceType')?.touched"
+                   class="error-hint">
+          <small class="mat-small">Please provide valid reference type</small>
+        </mat-error>
+
+        <!--   Reference Value   -->
+        <mat-form-field *ngIf="pageForm.value['isFrame']">
+          <mat-label>Reference Value</mat-label>
+          <input matInput placeholder="Reference Value" formControlName="referenceValue">
+        </mat-form-field>
+        <mat-error *ngIf="!pageForm?.get('referenceValue')?.valid && pageForm?.get('referenceValue')?.touched"
+                   class="error-hint">
+          <small class="mat-small">Please provide valid page reference value</small>
+        </mat-error>
+
+
+        <!--   Submit   -->
+        <div fxFlex
+             fxLayoutAlign="flex-start"
+             fxLayoutGap="10px"
+             *ngIf="(isPageSelected$|async) && editMode"
+             style="margin-top: 20px">
+          <button mat-stroked-button color="primary"
+                  (click)="cancelHandler('CANCEL_EDIT')"
+                  type="click">Cancel
+          </button>
+          <button mat-flat-button [disabled]="!pageForm.valid" color="primary"
+                  type="submit">Update
+          </button>
+        </div>
+
+        <div fxFlex
+             fxLayoutAlign="flex-start"
+             fxLayoutGap="10px"
+             *ngIf="addMode"
+             style="margin-top: 20px">
+          <button mat-stroked-button
+                  color="primary"
+                  (click)="cancelHandler('CANCEL_SAVE')"
+                  type="click">Cancel
+          </button>
+          <button mat-flat-button [disabled]="!pageForm.valid" color="primary"
+                  type="submit">Save
+          </button>
+        </div>
+
+      </div>
+    </form>
+
+  </div>
 
 </div>
+
+
 
 
 

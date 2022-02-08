@@ -15,6 +15,7 @@ export class RepositoryComponent implements OnInit {
 
   componentError$: Observable<string | null> = this.store.select(fromRepository.selectComponentError);
   isAddPageClicked$: Observable<boolean> = this.store.select(fromRepository.selectIsAddPageClicked);
+  selectIsPageSelected$: Observable<boolean> = this.store.select(fromRepository.selectIsPageSelected);
 
   constructor(private store: Store<AppState>, private _snackBar: MatSnackBar) {
   }

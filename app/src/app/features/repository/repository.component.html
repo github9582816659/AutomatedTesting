@@ -8,9 +8,9 @@
 
   <mat-divider [vertical]="true" style="height:100vh"></mat-divider>
 
-  <div fxFlex="65%" fxLayout="column" [fxLayoutAlign]="!(isAddPageClicked$|async) ? 'center center' : ''">
+  <div fxFlex="65%" fxLayout="column" [fxLayoutAlign]="((isAddPageClicked$|async) || (selectIsPageSelected$|async)) ? '' : 'center center'">
 
-    <div fxLayout="column" fxLayoutAlign="center center" *ngIf="!(isAddPageClicked$|async)">
+    <div fxLayout="column" fxLayoutAlign="center center" *ngIf="!((isAddPageClicked$|async) || (selectIsPageSelected$|async))">
       <h3>Get Started!</h3>
       <p>Start by creating new page and then components.</p>
       <button mat-flat-button color="primary">Add a new page</button>

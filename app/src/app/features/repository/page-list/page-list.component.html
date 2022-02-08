@@ -23,10 +23,9 @@
 
       <mat-selection-list [multiple]="false">
         <mat-list-option *ngFor="let page of pages" [value]="page">
-          <h3 style="">{{page.pageName}}</h3>
+          <h3 (click)="selectPageHandler(page)">{{page.pageName}}</h3>
           <mat-divider></mat-divider>
         </mat-list-option>
-
       </mat-selection-list>
 
 

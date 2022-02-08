@@ -8,7 +8,7 @@ import {Store} from "@ngrx/store";
 import * as fromRepository from "../../state/repository.selectors";
 import {AppState} from "../../../../app.state";
 import {
-  deletePageAction, savePageAction, updatePageAction
+  deletePageAction, isAddPageClickedAction, savePageAction, updatePageAction
 } from "../../state/repository.actions";
 
 @Component({
@@ -35,7 +35,7 @@ export class PageComponent implements OnInit, OnDestroy {
   });
   selectedPage$: Observable<Page | null> | undefined;
   isPageSelected$: Observable<boolean> | undefined;
-  isComponentSelected$: Observable<boolean> = this.store.select(fromRepository.selectIsComponentSelected);
+  //isComponentSelected$: Observable<boolean> = this.store.select(fromRepository.selectIsComponentSelected);
   isAddPageClicked$: Observable<boolean> | undefined;
   addOnBlur = true;
   readonly separatorKeysCodes = [ENTER, COMMA] as const;
@@ -46,7 +46,7 @@ export class PageComponent implements OnInit, OnDestroy {
   ];
   editMode: boolean = false;
   addMode: boolean = false;
-  isPageSelected: boolean = false;
+  //isPageSelected: boolean = false;
 
   constructor(private fb: FormBuilder, private store: Store<AppState>) {
   }
@@ -55,12 +55,18 @@ export class PageComponent implements OnInit, OnDestroy {
 
     this.store.select<boolean>(fromRepository.selectIsAddPageClicked).subscribe((isAddPageClicked: boolean) => {
       if (isAddPageClicked) {
+        console.log(isAddPageClicked)
         this.addMode = isAddPageClicked;
-        this.isPageSelected = false;
+        //this.isPageSelected = false;
         this.pageForm.reset();
+        this.pageForm.clearValidators();
         this.pageForm.enable();
         this.tags = [];
         this.hidePageForm = false;
+
+      } else {
+        this.addMode = isAddPageClicked;
+        this.hidePageForm = true;
       }
     });
 
@@ -69,7 +75,7 @@ export class PageComponent implements OnInit, OnDestroy {
       this.isPageSelected$.subscribe((isPageSelected: boolean) => {
         if (isPageSelected) {
           // PAGE OPEN
-          this.isPageSelected = isPageSelected;
+          //this.isPageSelected = isPageSelected;
           this.selectedPage$ = this.store.select<Page | null>(fromRepository.selectSelectedPage);
           if (this.selectedPage$) {
             this.selectedPage$.subscribe((page: Page | null) => {
@@ -86,7 +92,7 @@ export class PageComponent implements OnInit, OnDestroy {
                   isFrame: page?.isFrame || false,
                   referenceType: page?.referenceType || '',
                   referenceValue: page?.referenceValue || '',
-                  tags: page?.tags
+                  tags: page?.tags || []
                 });
 
                 // Update Tags Array
@@ -97,20 +103,25 @@ export class PageComponent implements OnInit, OnDestroy {
                 }
 
                 // Show Form
-                this.hidePageForm = false;
+                //this.hidePageForm = false;
 
                 // Disable Form
-                this.pageForm.disable();
+                //this.pageForm.disable();
+
+                this.hidePageForm = true;
+                this.editMode = false;
+                this.addMode = false;
               }
 
             });
           }
-        } else {
-          // PAGE CLOSE
-          this.isPageSelected = false;
-          this.hidePageForm = true;
-          this.pageForm.reset();
         }
+        // else {
+        //   // PAGE CLOSE
+        //   this.isPageSelected = false;
+        //   this.hidePageForm = true;
+        //   this.pageForm.reset();
+        // }
       });
     }
 
@@ -147,6 +158,7 @@ export class PageComponent implements OnInit, OnDestroy {
   editPageClickHandler() {
     this.pageForm.enable();
     this.editMode = true;
+    this.hidePageForm = false;
   }
 
    pageSubmitHandler() {
@@ -169,13 +181,15 @@ export class PageComponent implements OnInit, OnDestroy {
     if (this.editMode) {
       console.log('PAGE_EDIT')
       this.store.dispatch(updatePageAction({pageId: page.pageId, page: page}));
-      this.editMode = false;
       this.pageForm.disable();
+      this.editMode = false;
+      this.hidePageForm = true;
     } else {
       console.log('PAGE_SAVE')
       this.store.dispatch(savePageAction({page: page}));
       this.pageForm.reset();
       this.hidePageForm = true;
+      this.addMode = false;
     }
 
    }
@@ -184,4 +198,18 @@ export class PageComponent implements OnInit, OnDestroy {
     const pageId: string = this.pageForm.get('pageId')?.value;
     this.store.dispatch(deletePageAction({pageId: pageId}));
    }
+
+  cancelHandler(cancel: string) {
+    if (cancel === 'CANCEL_EDIT') {
+      this.editMode = false;
+      this.pageForm.disable();
+      this.hidePageForm = true;
+    }
+
+    if (cancel === 'CANCEL_SAVE') {
+      this.addMode = false;
+      this.hidePageForm = true;
+      this.store.dispatch(isAddPageClickedAction({isAddPageClicked: false}));
+    }
+  }
 }

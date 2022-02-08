@@ -71,6 +71,11 @@ export class PageListComponent implements OnInit,AfterViewInit {
 
   addPageClickHandler() {
    //this.store.dispatch(isPageSelectedAction({isPageSelected: false}));
+    console.log('PAGE_LIST -> ADD_PAGE')
    this.store.dispatch(isAddPageClickedAction({isAddPageClicked: true}));
+  }
+
+  selectPageHandler(page: Page) {
+    this.store.dispatch(pageSelectedAction({selected: true, page: page}));
   }
 }

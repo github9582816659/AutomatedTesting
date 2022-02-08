@@ -83,6 +83,7 @@ export const repositoryReducer = createReducer(
   on(RepositoryAction.isAddPageClickedAction, (state, {isAddPageClicked}) => ({
     ...state,
     isAddPageClicked: isAddPageClicked,
+    selectedPage: null,
     isPageSelected: false,
     selectedComponent: null,
     isComponentSelected: false,
@@ -108,6 +109,9 @@ export const repositoryReducer = createReducer(
   on(RepositoryAction.savePageSuccessAction, (state, {page}) => ({
     ...state,
     pages: [...state.pages, page],
+    isAddPageClicked: false,
+    isPageSelected: false,
+    selectedPage: null,
     pageError: null,
     pageStatus: 'success',
   })),
