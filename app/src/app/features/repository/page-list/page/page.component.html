@@ -47,7 +47,7 @@
         <!--   Page Name   -->
         <mat-form-field>
           <mat-label>Page Name</mat-label>
-          <input matInput placeholder="Page Name" formControlName="pageName" name="pageName">
+          <input matInput placeholder="Page Name" formControlName="pageName" name="pageName" autocomplete="off">
         </mat-form-field>
         <mat-error *ngIf="!pageForm?.get('pageName')?.valid && pageForm?.get('pageName')?.touched" class="error-hint">
           <small class="mat-small">Page Name is required</small>
@@ -56,7 +56,7 @@
         <!--   Page Description   -->
         <mat-form-field>
           <mat-label>Page Description</mat-label>
-          <input matInput placeholder="Page Description" formControlName="pageDescription" name="pageDescription">
+          <input matInput placeholder="Page Description" formControlName="pageDescription" name="pageDescription" autocomplete="off">
         </mat-form-field>
 
 
@@ -64,7 +64,7 @@
         <div fxFlex="nogrow">
           <mat-form-field fxFill>
             <mat-label>Tags</mat-label>
-            <mat-chip-list #chipList formControlName="tags">
+            <mat-chip-list #chipList formControlName="tags" autocomplete="off">
               <mat-chip *ngFor="let tag of tags"
                         (removed)="removeTag(tag)">
                 {{tag}}
@@ -84,13 +84,14 @@
         <!--   Is Frame   -->
         <mat-checkbox class="checkbox-margin"
                       formControlName="isFrame"
+                      autocomplete="off"
         >Frame
         </mat-checkbox>
 
         <!--   Reference Type   -->
         <mat-form-field *ngIf="pageForm.value['isFrame']">
           <mat-label>Reference Type</mat-label>
-          <mat-select formControlName="referenceType">
+          <mat-select formControlName="referenceType" autocomplete="off">
             <mat-option *ngFor="let refType of refTypes" [value]="refType.value">
               {{refType.viewValue}}
             </mat-option>
@@ -104,7 +105,7 @@
         <!--   Reference Value   -->
         <mat-form-field *ngIf="pageForm.value['isFrame']">
           <mat-label>Reference Value</mat-label>
-          <input matInput placeholder="Reference Value" formControlName="referenceValue">
+          <input matInput placeholder="Reference Value" formControlName="referenceValue" autocomplete="off">
         </mat-form-field>
         <mat-error *ngIf="!pageForm?.get('referenceValue')?.valid && pageForm?.get('referenceValue')?.touched"
                    class="error-hint">

@@ -7,7 +7,6 @@ import com.testing.automated.exception.AtlasException;
 import com.testing.automated.exception.ResourceNotFoundException;
 import com.testing.automated.repository.ComponentRepository;
 import com.testing.automated.repository.PageRepository;
-import com.testing.automated.service.ComponentService;
 import com.testing.automated.service.PageService;
 import com.testing.automated.util.Constants;
 import lombok.extern.slf4j.Slf4j;
@@ -16,7 +15,6 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 @Service
 @Slf4j
@@ -24,39 +22,34 @@ public class PageServiceImpl implements PageService {
 
     private final PageRepository pageRepository;
     private final ComponentRepository componentRepository;
-    private final ComponentService componentService;
 
-    public PageServiceImpl(PageRepository pageRepository, ComponentRepository componentRepository, ComponentService componentService) {
+    public PageServiceImpl(PageRepository pageRepository, ComponentRepository componentRepository) {
         this.pageRepository = pageRepository;
         this.componentRepository = componentRepository;
-        this.componentService = componentService;
     }
 
     @Override
     public PageResponseDTO findPageById(String id) {
-        log.info("PageService findPageById with ID {}", id);
+        log.info("[PageService.findPageById] findPageById with ID {}", id);
         try {
-            Optional<Page> byId = pageRepository.findById(id);
-            if (!byId.isPresent()) {
-                throw new ResourceNotFoundException("Page not found with ID: " + id);
-            }
-            return getPageDto(byId.get());
+            Page page = pageRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Page not found with ID: " + id));
+            return getPageDto(page);
         } catch (ResourceNotFoundException ex) {
-            log.error("Page not found with ID: {} {} ", id, ex);
+            log.error("ResourceNotFoundException Page not found with ID: {} {} ", id, ex);
             throw new ResourceNotFoundException("Page not found with ID: " + id);
-        } catch (Exception ex) {
-            log.error("Atlas Exception while finding page with ID: {} {} /n", id, ex);
+        } catch (AtlasException ex) {
+            log.error("AtlasException while finding page with ID: {} {} /n", id, ex);
             throw new AtlasException(Constants.ATLAS_ERROR);
         }
     }
 
     @Override
     public RepositoryResponseDTO findAllPagesAndComponents() {
-        log.info("PageService findAllPagesAndComponents ");
+        log.info("[PageService.findAllPagesAndComponents] findAllPagesAndComponents ");
         try {
             List<Page> all = pageRepository.findAll();
             if (all.isEmpty()) {
-                throw new ResourceNotFoundException("Repository not found");
+                throw new ResourceNotFoundException("Pages & Component not found");
             }
 
             List<RepositoryPagesDTO> pagesList = new ArrayList<>();
@@ -86,17 +79,17 @@ public class PageServiceImpl implements PageService {
                     .repository(pagesList)
                     .build();
         } catch (ResourceNotFoundException ex) {
-            log.error("Repository not found ", ex);
-            throw new ResourceNotFoundException("Repository not found ");
-        } catch (Exception ex) {
-            log.error("Atlas Exception while getting repository ", ex);
+            log.error("ResourceNotFoundException pages and components not found ", ex);
+            throw new ResourceNotFoundException("Pages & Components not found ");
+        } catch (AtlasException ex) {
+            log.error("AtlasException while finding all pages and components ", ex);
             throw new AtlasException(Constants.ATLAS_ERROR);
         }
     }
 
     @Override
     public List<PageResponseDTO> findAllPages() {
-        log.info("PageService findAllPages");
+        log.info("[PageService.findAllPages] findAllPages");
         try {
             List<PageResponseDTO> pageList = new ArrayList<>();
             List<Page> all = pageRepository.findAll();
@@ -106,15 +99,15 @@ public class PageServiceImpl implements PageService {
                 }
             }
             return pageList;
-        } catch (Exception ex) {
-            log.error("Atlas Exception while find all pages ", ex);
+        } catch (AtlasException ex) {
+            log.error("AtlasException while find all pages ", ex);
             throw new AtlasException(Constants.ATLAS_ERROR);
         }
     }
 
     @Override
     public PageResponseDTO savePage(PageRequestDTO pageRequest) {
-        log.info("PageService savePage");
+        log.info("[PageService.savePage] savePage");
         try {
             Page newPage = Page.builder()
                     .pageId(new ObjectId())
@@ -131,22 +124,19 @@ public class PageServiceImpl implements PageService {
                     .build();
             Page savedPage = pageRepository.save(newPage);
             return getPageDto(savedPage);
-        } catch (Exception ex) {
-            log.error("Atlas Exception while saving page ", ex);
+        } catch (AtlasException ex) {
+            log.error("AtlasException while saving page", ex);
             throw new AtlasException(Constants.ATLAS_ERROR);
         }
     }
 
     @Override
     public PageResponseDTO updatePage(String id, PageRequestDTO pageRequest) {
-        log.info("PageService updatePage with ID {}", id);
+        log.info("[PageService.updatePage] updatePage with ID {}", id);
         try {
-            Optional<Page> byId = pageRepository.findById(id);
-            if (!byId.isPresent()) {
-                throw new ResourceNotFoundException("Page not found with ID: " + id);
-            }
+            Page p = pageRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Page not found with ID: " + id));
 
-            Page page = byId.get();
+            Page page = p;
             page.setPageName(pageRequest.getPageName());
             page.setPageDescription(pageRequest.getPageDescription());
             page.setPageType(pageRequest.getPageType());
@@ -160,24 +150,26 @@ public class PageServiceImpl implements PageService {
             return getPageDto(update);
 
 
-        } catch (Exception ex) {
-            log.error("Atlas Exception while updating page with ID {} {}", id, ex);
+        } catch (ResourceNotFoundException ex) {
+            log.error("ResourceNotFoundException Page not found with id {}", id, ex);
+            throw new ResourceNotFoundException("Repository not found ");
+        } catch (AtlasException ex) {
+            log.error("AtlasException while updating page with ID {} {}", id, ex);
             throw new AtlasException(Constants.ATLAS_ERROR);
         }
     }
 
     @Override
     public void deletePageById(String id) {
-        log.info("PageService deletePageById with ID {}", id);
+        log.info("[PageService.deletePageById] deletePageById with ID {}", id);
         try {
-            Optional<Page> byId = pageRepository.findById(id);
-            if (!byId.isPresent()) {
-                throw new ResourceNotFoundException("Page not found with ID: " + id);
-            }
-
-            pageRepository.delete(byId.get());
-        } catch (Exception ex) {
-            log.error("Atlas Exception while deleting page with ID {} {}", id, ex);
+            Page page = pageRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Page not found with ID: " + id));
+            pageRepository.delete(page);
+        } catch (ResourceNotFoundException ex) {
+            log.error("ResourceNotFoundException Page with id {} not found ",id, ex);
+            throw new ResourceNotFoundException("Repository not found ");
+        } catch (AtlasException ex) {
+            log.error("AtlasException while deleting page with id {} {}", id, ex);
             throw new AtlasException(Constants.ATLAS_ERROR);
         }
 
